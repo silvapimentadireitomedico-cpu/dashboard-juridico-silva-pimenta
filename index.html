@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Silva Pimenta — Setor Jurídico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="bg-decoration">
+    <div class="bg-circle bg-circle-1"></div>
+    <div class="bg-circle bg-circle-2"></div>
+  </div>
+
+  <header class="header">
+    <div class="brand">
+      <img src="logo.png" alt="Silva Pimenta" class="brand-logo">
+    </div>
+    <div class="period">
+      <div class="period-label">Setor Jurídico · <span id="trimestreValue">2º Trimestre</span></div>
+      <div class="period-value" id="periodValue">Maio · 2026</div>
+    </div>
+    <div class="total-box">
+      <div class="total-label">Total do trimestre</div>
+      <div class="total-value" id="totalValue">—</div>
+    </div>
+  </header>
+
+  <section class="podium" id="podium">
+    <div class="podium-place podium-2" id="podium2">
+      <div class="podium-photo-wrap">
+        <div class="podium-medal">2º</div>
+        <div class="podium-photo"></div>
+      </div>
+      <div class="podium-name">—</div>
+      <div class="podium-count">
+        <span class="podium-count-num" data-count="0">0</span>
+        <span class="podium-count-label">iniciais</span>
+      </div>
+    </div>
+
+    <div class="podium-place podium-1" id="podium1">
+      <div class="crown">★</div>
+      <div class="podium-photo-wrap">
+        <div class="podium-medal">1º</div>
+        <div class="podium-photo"></div>
+      </div>
+      <div class="podium-name">—</div>
+      <div class="podium-count">
+        <span class="podium-count-num" data-count="0">0</span>
+        <span class="podium-count-label">iniciais</span>
+      </div>
+    </div>
+
+    <div class="podium-place podium-3" id="podium3">
+      <div class="podium-photo-wrap">
+        <div class="podium-medal">3º</div>
+        <div class="podium-photo"></div>
+      </div>
+      <div class="podium-name">—</div>
+      <div class="podium-count">
+        <span class="podium-count-num" data-count="0">0</span>
+        <span class="podium-count-label">iniciais</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="middle">
+    <div class="middle-left">
+      <h2 class="section-title">Ranking Geral</h2>
+      <div class="ranking-list" id="rankingList"><!-- preenchido via JS --></div>
+    </div>
+    <div class="middle-right">
+      <h2 class="section-title">Evolução · Últimos 30 dias</h2>
+      <div class="chart-wrap">
+        <svg id="chart" viewBox="0 0 800 220" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="tipos">
+    <div class="tipos-grid" id="tiposGrid"><!-- preenchido via JS --></div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-today">
+      <span class="footer-today-icon">●</span>
+      <span id="footerToday">Aguardando dados de hoje</span>
+    </div>
+    <div class="footer-update">
+      Atualizado em <span id="footerTime">—</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
