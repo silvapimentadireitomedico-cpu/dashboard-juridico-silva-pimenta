@@ -26,6 +26,9 @@ const COR_TIPO = {
 // Polling — busca novos dados a cada 30s
 const POLL_MS = 30000;
 
+// Estado pra detectar troca de 1º lugar entre refreshes
+let ultimoLider = null;
+
 // =========================================================
 // BUSCA DE DADOS
 // =========================================================
@@ -65,6 +68,34 @@ function setFotoOrInicial(el, nome) {
   img.src = fotoUrl(nome);
 }
 
+// Toca "ding-dong" curto via Web Audio API quando o 1º lugar troca.
+// Sem arquivo externo — funciona offline no Silk Browser do Fire Stick.
+function tocarSomNovoLider() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const tom = (freq, inicio, dur) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      const t0 = ctx.currentTime + inicio;
+      gain.gain.setValueAtTime(0, t0);
+      gain.gain.linearRampToValueAtTime(0.35, t0 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t0);
+      osc.stop(t0 + dur);
+    };
+    tom(880, 0, 0.4);       // A5
+    tom(1318.51, 0.25, 0.6); // E6
+  } catch (e) {
+    // Autoplay pode ser bloqueado antes da 1ª interação no Silk; silencia
+  }
+}
+
 function animarNumero(el, alvo, duracao = 1200) {
   const inicio = parseInt(el.dataset.count || '0', 10);
   const t0 = performance.now();
@@ -99,6 +130,14 @@ function renderHeader(dados) {
 
 function renderPodio(dados) {
   const top3 = (dados.ranking || []).slice(0, 3);
+
+  // Detecta troca de 1º lugar e toca som (não toca na 1ª carga)
+  const liderAtual = top3[0] ? top3[0].nome : null;
+  if (ultimoLider !== null && liderAtual && liderAtual !== ultimoLider) {
+    tocarSomNovoLider();
+  }
+  if (liderAtual) ultimoLider = liderAtual;
+
   // ordem na tela: 2º (esq), 1º (centro), 3º (dir)
   const ordem = [
     { idx: 1, el: 'podium2' },
@@ -291,6 +330,25 @@ function scaleDashboard() {
 }
 window.addEventListener('resize', scaleDashboard);
 scaleDashboard();
+
+// =========================================================
+// KEEPALIVE — garante que o video minusculo continue rodando.
+// Se algo pausar (autoplay bloqueado, falha de codec), tenta de novo.
+// =========================================================
+(function manterKeepalive() {
+  const v = document.querySelector('.keepalive');
+  if (!v) return;
+  const tentarPlay = () => {
+    const p = v.play();
+    if (p && typeof p.catch === 'function') p.catch(() => {});
+  };
+  v.addEventListener('pause', tentarPlay);
+  v.addEventListener('ended', tentarPlay);
+  // 1ª tentativa imediata
+  tentarPlay();
+  // Tentativa periodica como rede de seguranca
+  setInterval(() => { if (v.paused) tentarPlay(); }, 60000);
+})();
 
 refresh();
 setInterval(refresh, POLL_MS);

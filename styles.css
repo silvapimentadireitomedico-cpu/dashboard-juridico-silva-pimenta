@@ -36,6 +36,21 @@ html, body {
   overflow: hidden;
 }
 
+/* Keepalive — video minusculo invisivel.
+   Mantem TV/Fire Stick em "media playing" pra nao entrar em descanso.
+   Nao usa display:none nem opacity:0 (alguns navegadores pausam).
+   Fica num canto, 4x4px com transparencia minima. */
+.keepalive {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  width: 4px;
+  height: 4px;
+  opacity: 0.01;
+  pointer-events: none;
+  z-index: 10000;
+}
+
 /* Wrapper que ocupa a tela inteira e centraliza o container */
 .dashboard-wrapper {
   position: fixed;
@@ -94,11 +109,21 @@ html, body {
   width: 600px; height: 600px;
   background: var(--gold);
   top: -200px; right: -200px;
+  animation: float-1 18s ease-in-out infinite;
 }
 .bg-circle-2 {
   width: 700px; height: 700px;
   background: var(--teal-light);
   bottom: -300px; left: -300px;
+  animation: float-2 22s ease-in-out infinite;
+}
+@keyframes float-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.15; }
+  50%      { transform: translate(-40px, 30px) scale(1.05); opacity: 0.18; }
+}
+@keyframes float-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.15; }
+  50%      { transform: translate(40px, -30px) scale(1.08); opacity: 0.12; }
 }
 
 body > * { position: relative; z-index: 1; }
