@@ -6,8 +6,8 @@
 // Endpoint que serve o JSON da planilha do Silva Pimenta.
 const API_URL = 'https://script.google.com/macros/s/AKfycbwt_Mm2GpDQB5OfbhIb04r7ZJydXCwFadfrzn4IA5stu29hGxMDeR_5uXJlIMfhZhBWXA/exec';
 
-// Equipe na ordem que aparece na planilha
-const EQUIPE = ['JULIA', 'HUGO', 'STELLA', 'RAFAEL', 'NATALY', 'ISABELLA', 'ANA', 'SUELLEN'];
+// Equipe na ordem que aparece na planilha (Julia saiu em 05/05/2026)
+const EQUIPE = ['HUGO', 'STELLA', 'RAFAEL', 'NATALY', 'ISABELLA', 'ANA', 'SUELLEN'];
 
 // Cores das pílulas dos tipos de processo
 const COR_TIPO = {
@@ -49,8 +49,11 @@ async function fetchDados() {
 // RENDERIZAÇÃO
 // =========================================================
 
+// Cache buster: muda a cada carga da página (auto-reload de 30min recarrega as fotos).
+// Garante que troca de foto aparece sem precisar limpar cache do navegador.
+const FOTO_VER = Date.now();
 function fotoUrl(nome) {
-  return `fotos/${nome.toLowerCase().trim()}.jpg`;
+  return `fotos/${nome.toLowerCase().trim()}.jpg?v=${FOTO_VER}`;
 }
 
 function setFotoOrInicial(el, nome) {
@@ -332,9 +335,33 @@ window.addEventListener('resize', scaleDashboard);
 scaleDashboard();
 
 // =========================================================
-// KEEPALIVE — garante que o video minusculo continue rodando.
-// Se algo pausar (autoplay bloqueado, falha de codec), tenta de novo.
+// KEEPALIVE — 3 camadas pra impedir TV/Fire Stick de dormir
+//   1. Wake Lock API (moderno — pede ao SO pra manter tela acesa)
+//   2. Video com movimento real tocando em loop
+//   3. Auto-reload da pagina a cada 30 min (rede de seguranca)
 // =========================================================
+
+// Camada 1 — Wake Lock API
+(async function pedirWakeLock() {
+  if (!('wakeLock' in navigator)) return;
+  let lock = null;
+  const requisitar = async () => {
+    try {
+      lock = await navigator.wakeLock.request('screen');
+      lock.addEventListener('release', () => {
+        // Se o sistema liberar (ex: tela bloqueou), tenta de novo quando visivel
+      });
+    } catch (e) {
+      // Permissao negada ou nao suportado — silencia
+    }
+  };
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') requisitar();
+  });
+  requisitar();
+})();
+
+// Camada 2 — manter o video rodando
 (function manterKeepalive() {
   const v = document.querySelector('.keepalive');
   if (!v) return;
@@ -344,11 +371,16 @@ scaleDashboard();
   };
   v.addEventListener('pause', tentarPlay);
   v.addEventListener('ended', tentarPlay);
-  // 1ª tentativa imediata
   tentarPlay();
-  // Tentativa periodica como rede de seguranca
-  setInterval(() => { if (v.paused) tentarPlay(); }, 60000);
+  setInterval(() => { if (v.paused) tentarPlay(); }, 30000);
 })();
+
+// Camada 3 — recarregar a pagina periodicamente
+// 30 min: longo o suficiente pra nao incomodar, curto pra resetar qualquer
+// estado bugado do Silk Browser (vazamentos de memoria, sockets travados).
+setTimeout(() => {
+  location.reload();
+}, 30 * 60 * 1000);
 
 refresh();
 setInterval(refresh, POLL_MS);
