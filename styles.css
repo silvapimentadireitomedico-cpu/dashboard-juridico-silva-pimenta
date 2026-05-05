@@ -28,33 +28,51 @@
 
 html, body {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   margin: 0;
   background: var(--teal-deep);
   color: var(--white);
   font-family: 'Inter', sans-serif;
   overflow: hidden;
-  position: relative;
 }
 
-body {
+/* Wrapper que ocupa a tela inteira e centraliza o container */
+.dashboard-wrapper {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--teal-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Container fixo de 1920x1080 — o JS aplica scale() pra caber em qualquer tela */
+.dashboard-container {
+  width: 1920px;
+  height: 1080px;
+  flex-shrink: 0;
   background:
     radial-gradient(ellipse at top left, var(--teal) 0%, var(--teal-deep) 70%),
     var(--teal-deep);
   display: flex;
   flex-direction: column;
-  padding: 18px 40px;
+  padding: 24px 48px;
   box-sizing: border-box;
+  transform-origin: center center;
+  position: relative;
 }
-body > * {
+.dashboard-container > * {
   flex-shrink: 0;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
-body > .middle {
+.dashboard-container > .middle {
   flex: 1 1 auto;
   min-height: 0;
 }
-body > footer {
+.dashboard-container > footer {
   margin-bottom: 0;
 }
 

@@ -279,5 +279,19 @@ async function refresh() {
   renderFooter(dados);
 }
 
+// =========================================================
+// SCALE AUTOMÁTICO — dashboard fixo 1920x1080 escala pra caber
+// em qualquer tela (TV, monitor, laptop) mantendo proporção
+// =========================================================
+function scaleDashboard() {
+  const container = document.querySelector('.dashboard-container');
+  if (!container) return;
+  const baseW = 1920, baseH = 1080;
+  const scale = Math.min(window.innerWidth / baseW, window.innerHeight / baseH);
+  container.style.transform = 'scale(' + scale + ')';
+}
+window.addEventListener('resize', scaleDashboard);
+scaleDashboard();
+
 refresh();
 setInterval(refresh, POLL_MS);
