@@ -475,26 +475,24 @@ body > * { position: relative; z-index: 1; }
    TIPOS
    ========================================================= */
 .tipos-grid {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-}
-.tipos-grid > .tipo-card {
-  flex: 1 1 0;
-  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  flex: 1;
+  align-content: start;
 }
 
 .tipo-card {
   background: var(--white-soft);
   border: 1px solid rgba(197, 165, 122, 0.2);
-  border-radius: 6px;
-  padding: 10px 12px;
+  border-radius: 8px;
+  padding: 14px 18px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
 }
 .tipo-dot {
-  width: 12px; height: 12px;
+  width: 16px; height: 16px;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -503,20 +501,21 @@ body > * { position: relative; z-index: 1; }
   min-width: 0;
 }
 .tipo-nome {
-  font-size: 9px;
-  letter-spacing: 1px;
+  font-size: 11px;
+  letter-spacing: 2px;
   color: var(--white-mid);
   text-transform: uppercase;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .tipo-qtd {
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 28px;
+  font-weight: 800;
   color: var(--white);
   line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
 /* =========================================================

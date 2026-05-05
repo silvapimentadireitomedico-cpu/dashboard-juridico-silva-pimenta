@@ -274,7 +274,6 @@ async function refresh() {
   renderHeader(dados);
   renderPodio(dados);
   renderRanking(dados);
-  renderChart(dados);
   renderTipos(dados);
   renderFooter(dados);
 }
