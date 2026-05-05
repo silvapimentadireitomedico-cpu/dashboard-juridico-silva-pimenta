@@ -24,6 +24,8 @@
   --white-soft: rgba(255, 255, 255, 0.08);
   --white-mid: rgba(255, 255, 255, 0.6);
   --black: #1A1A1A;
+  --alert: #E84545;
+  --alert-deep: #A82828;
 }
 
 html, body {
@@ -472,6 +474,18 @@ body > * { position: relative; z-index: 1; }
   border-radius: 4px;
   transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
   position: relative;
+}
+
+/* Pessoa que NÃO fez nenhuma inicial hoje — destaque em vermelho (só no ranking) */
+.ranking-item.sem-hoje .ranking-photo {
+  border-color: var(--alert);
+  box-shadow: 0 0 0 2px rgba(232, 69, 69, 0.3);
+}
+.ranking-item.sem-hoje .ranking-bar {
+  background: linear-gradient(90deg, var(--alert-deep) 0%, var(--alert) 100%);
+}
+.ranking-item.sem-hoje .ranking-qtd {
+  color: var(--alert);
 }
 .ranking-name {
   position: absolute;

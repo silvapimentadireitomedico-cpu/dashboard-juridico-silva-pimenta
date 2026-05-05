@@ -6,8 +6,9 @@
 // Endpoint que serve o JSON da planilha do Silva Pimenta.
 const API_URL = 'https://script.google.com/macros/s/AKfycbwt_Mm2GpDQB5OfbhIb04r7ZJydXCwFadfrzn4IA5stu29hGxMDeR_5uXJlIMfhZhBWXA/exec';
 
-// Equipe na ordem que aparece na planilha (Julia saiu em 05/05/2026)
-const EQUIPE = ['HUGO', 'STELLA', 'RAFAEL', 'NATALY', 'ISABELLA', 'ANA', 'SUELLEN'];
+// Equipe na ordem que aparece na planilha
+// (Julia saiu em 05/05/2026 mas continua contabilizando o trimestre)
+const EQUIPE = ['JULIA', 'HUGO', 'STELLA', 'RAFAEL', 'NATALY', 'ISABELLA', 'ANA', 'SUELLEN'];
 
 // Cores das pílulas dos tipos de processo
 const COR_TIPO = {
@@ -175,7 +176,8 @@ function renderRanking(dados) {
 
   ranking.forEach((item, i) => {
     const row = document.createElement('div');
-    row.className = 'ranking-item';
+    const semHoje = (item.qtdHoje || 0) === 0;
+    row.className = 'ranking-item' + (semHoje ? ' sem-hoje' : '');
     row.innerHTML = `
       <div class="ranking-pos">${i + 1}º</div>
       <div class="ranking-photo"></div>
