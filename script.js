@@ -215,6 +215,12 @@ function renderTipos(dados) {
   });
 }
 
+function renderEstoque(dados) {
+  const el = document.getElementById('estoqueValue');
+  if (!el) return;
+  animarNumero(el, Number(dados.estoque) || 0);
+}
+
 function renderFooter(dados) {
   const tot = (dados.ranking || []).reduce((s, r) => s + (r.qtdHoje || 0), 0);
   const top = [...(dados.ranking || [])]
@@ -319,6 +325,7 @@ async function refresh() {
   renderPodio(dados);
   renderRanking(dados);
   renderTipos(dados);
+  renderEstoque(dados);
   renderFooter(dados);
 }
 

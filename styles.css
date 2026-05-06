@@ -517,8 +517,36 @@ body > * { position: relative; z-index: 1; }
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
-  flex: 1;
+  flex: 1 1 auto;
   align-content: start;
+}
+
+.estoque-card {
+  flex: 0 0 auto;
+  margin-top: 12px;
+  background: linear-gradient(135deg, rgba(197, 165, 122, 0.18) 0%, rgba(197, 165, 122, 0.06) 100%);
+  border: 1px solid rgba(197, 165, 122, 0.45);
+  border-radius: 8px;
+  padding: 14px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+.estoque-label {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  letter-spacing: 4px;
+  color: var(--white-mid);
+  text-transform: uppercase;
+}
+.estoque-value {
+  font-family: 'Inter', sans-serif;
+  font-size: 40px;
+  font-weight: 800;
+  color: var(--gold);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
 .tipo-card {
