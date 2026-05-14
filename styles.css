@@ -521,11 +521,10 @@ body > * { position: relative; z-index: 1; }
   align-content: start;
 }
 
-.estoque-card {
+.estoque-card,
+.revisados-card {
   flex: 0 0 auto;
   margin-top: 12px;
-  background: linear-gradient(135deg, rgba(197, 165, 122, 0.18) 0%, rgba(197, 165, 122, 0.06) 100%);
-  border: 1px solid rgba(197, 165, 122, 0.45);
   border-radius: 8px;
   padding: 14px 22px;
   display: flex;
@@ -533,21 +532,32 @@ body > * { position: relative; z-index: 1; }
   justify-content: space-between;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
-.estoque-label {
+.estoque-card {
+  background: linear-gradient(135deg, rgba(197, 165, 122, 0.18) 0%, rgba(197, 165, 122, 0.06) 100%);
+  border: 1px solid rgba(197, 165, 122, 0.45);
+}
+.revisados-card {
+  background: linear-gradient(135deg, rgba(110, 195, 130, 0.20) 0%, rgba(110, 195, 130, 0.06) 100%);
+  border: 1px solid rgba(110, 195, 130, 0.50);
+}
+.estoque-label,
+.revisados-label {
   font-family: 'Playfair Display', serif;
   font-size: 13px;
   letter-spacing: 4px;
   color: var(--white-mid);
   text-transform: uppercase;
 }
-.estoque-value {
+.estoque-value,
+.revisados-value {
   font-family: 'Inter', sans-serif;
   font-size: 40px;
   font-weight: 800;
-  color: var(--gold);
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
+.estoque-value { color: var(--gold); }
+.revisados-value { color: #7DD09A; }
 
 .tipo-card {
   background: var(--white-soft);

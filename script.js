@@ -7,8 +7,8 @@
 const API_URL = 'https://script.google.com/macros/s/AKfycbwt_Mm2GpDQB5OfbhIb04r7ZJydXCwFadfrzn4IA5stu29hGxMDeR_5uXJlIMfhZhBWXA/exec';
 
 // Equipe na ordem que aparece na planilha
-// (Julia saiu em 05/05/2026 mas continua contabilizando o trimestre)
-const EQUIPE = ['JULIA', 'HUGO', 'STELLA', 'RAFAEL', 'NATALY', 'ISABELLA', 'ANA', 'SUELLEN'];
+// (Julia saiu, substituída por MAX em 13/05/2026)
+const EQUIPE = ['MAX', 'HUGO', 'STELLA', 'RAFAEL', 'NATALY', 'ISABELLA', 'ANA', 'SUELLEN'];
 
 // Cores das pílulas dos tipos de processo
 const COR_TIPO = {
@@ -221,6 +221,12 @@ function renderEstoque(dados) {
   animarNumero(el, Number(dados.estoque) || 0);
 }
 
+function renderRevisados(dados) {
+  const el = document.getElementById('revisadosValue');
+  if (!el) return;
+  animarNumero(el, Number(dados.revisados) || 0);
+}
+
 function renderFooter(dados) {
   const tot = (dados.ranking || []).reduce((s, r) => s + (r.qtdHoje || 0), 0);
   const top = [...(dados.ranking || [])]
@@ -325,6 +331,7 @@ async function refresh() {
   renderPodio(dados);
   renderRanking(dados);
   renderTipos(dados);
+  renderRevisados(dados);
   renderEstoque(dados);
   renderFooter(dados);
 }

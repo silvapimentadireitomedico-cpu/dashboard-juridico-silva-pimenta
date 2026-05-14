@@ -37,7 +37,7 @@
       "seguro": 1
     },
     {
-      "nome": "JULIA",
+      "nome": "MAX",
       "qtd": 10,
       "qtdHoje": 0,
       "seguro": 0
@@ -85,6 +85,7 @@
   ],
   "totalGeral": 115,
   "estoque": 111,
+  "revisados": 59,
   "evolucao": [
     {
       "data": "2026-04-05",
