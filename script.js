@@ -207,8 +207,8 @@ function renderTipos(dados) {
     card.innerHTML = `
       <div class="tipo-dot" style="background:${cor}"></div>
       <div class="tipo-info">
-        <div class="tipo-nome">${t.tipo}</div>
         <div class="tipo-qtd">${t.qtd}</div>
+        <div class="tipo-nome">${t.tipo}</div>
       </div>
     `;
     grid.appendChild(card);

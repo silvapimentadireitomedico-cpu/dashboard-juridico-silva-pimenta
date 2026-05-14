@@ -576,22 +576,28 @@ body > * { position: relative; z-index: 1; }
 .tipo-info {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 14px;
 }
 .tipo-nome {
-  font-size: 11px;
-  letter-spacing: 2px;
-  color: var(--white-mid);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  color: var(--white);
   text-transform: uppercase;
-  margin-bottom: 4px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-family: 'Playfair Display', serif;
 }
 .tipo-qtd {
   font-size: 28px;
   font-weight: 800;
-  color: var(--white);
+  color: var(--gold);
   line-height: 1;
+  flex: 0 0 auto;
   font-variant-numeric: tabular-nums;
 }
 
