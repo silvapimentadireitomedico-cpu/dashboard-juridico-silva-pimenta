@@ -559,6 +559,57 @@ body > * { position: relative; z-index: 1; }
 .estoque-value { color: var(--gold); }
 .revisados-value { color: #7DD09A; }
 
+/* Resumo mensal — 3 cards menores em grid (Abril | Total | Encerramentos) */
+.resumo-mensal {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+  flex: 0 0 auto;
+}
+.resumo-card {
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  min-width: 0;
+}
+.resumo-abril {
+  background: linear-gradient(135deg, rgba(147, 197, 253, 0.18) 0%, rgba(147, 197, 253, 0.05) 100%);
+  border: 1px solid rgba(147, 197, 253, 0.45);
+}
+.resumo-total {
+  background: linear-gradient(135deg, rgba(197, 165, 122, 0.22) 0%, rgba(197, 165, 122, 0.06) 100%);
+  border: 1px solid rgba(197, 165, 122, 0.55);
+}
+.resumo-encerr {
+  background: linear-gradient(135deg, rgba(110, 195, 130, 0.22) 0%, rgba(110, 195, 130, 0.06) 100%);
+  border: 1px solid rgba(110, 195, 130, 0.50);
+}
+.resumo-label {
+  font-family: 'Playfair Display', serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--white-mid);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  white-space: nowrap;
+}
+.resumo-value {
+  font-family: 'Inter', sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.resumo-abril .resumo-value { color: #93C5FD; }
+.resumo-total .resumo-value { color: var(--gold-bright); }
+.resumo-encerr .resumo-value { color: #7DD09A; }
+
 .tipo-card {
   background: var(--white-soft);
   border: 1px solid rgba(197, 165, 122, 0.2);

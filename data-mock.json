@@ -86,6 +86,11 @@
   "totalGeral": 115,
   "estoque": 111,
   "revisados": 59,
+  "entradasMarco": 165,
+  "entradasAbril": 157,
+  "entradasMaio": 0,
+  "totalEntradas": 322,
+  "totalEncerramentos": 104,
   "evolucao": [
     {
       "data": "2026-04-05",

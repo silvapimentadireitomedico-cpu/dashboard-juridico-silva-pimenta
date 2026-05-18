@@ -131,9 +131,26 @@ function montarDados() {
   // Revisados: célula M4 — quantidade já revisada no trimestre
   const revisados = Number(sheet.getRange(4, 13).getValue()) || 0;
 
+  // Entradas por mês do trimestre (coluna P = 16) — março é referência (P1), abril (P2), maio (P3)
+  // Total Entradas: soma dos meses já fechados do trimestre (P4)
+  const entradasMarco   = Number(sheet.getRange(1, 16).getValue()) || 0;
+  const entradasAbril   = Number(sheet.getRange(2, 16).getValue()) || 0;
+  const entradasMaio    = Number(sheet.getRange(3, 16).getValue()) || 0;
+  const totalEntradas   = Number(sheet.getRange(4, 16).getValue()) || 0;
+  // Total Encerramentos: célula Q2 (coluna Q = 17, linha 2)
+  const totalEncerramentos = Number(sheet.getRange(2, 17).getValue()) || 0;
+
+  const extras = {
+    entradasMarco: entradasMarco,
+    entradasAbril: entradasAbril,
+    entradasMaio: entradasMaio,
+    totalEntradas: totalEntradas,
+    totalEncerramentos: totalEncerramentos
+  };
+
   // Dados começam na linha 5
   const lastRow = sheet.getLastRow();
-  if (lastRow < 5) return resumir(ranking, rankingHoje, seguroPorNome, tipos, totalGeral, evolucaoMap, nomeAbaUsada, coresNaoMapeadas, estoque, revisados);
+  if (lastRow < 5) return resumir(ranking, rankingHoje, seguroPorNome, tipos, totalGeral, evolucaoMap, nomeAbaUsada, coresNaoMapeadas, estoque, revisados, extras);
 
   const range = sheet.getRange(5, 1, lastRow - 4, 9);
   const valores = range.getValues();
@@ -186,10 +203,11 @@ function montarDados() {
     }
   }
 
-  return resumir(ranking, rankingHoje, seguroPorNome, tipos, totalGeral, evolucaoMap, nomeAbaUsada, coresNaoMapeadas, estoque, revisados);
+  return resumir(ranking, rankingHoje, seguroPorNome, tipos, totalGeral, evolucaoMap, nomeAbaUsada, coresNaoMapeadas, estoque, revisados, extras);
 }
 
-function resumir(ranking, rankingHoje, seguroPorNome, tipos, totalGeral, evolucaoMap, nomeAbaUsada, coresNaoMapeadas, estoque, revisados) {
+function resumir(ranking, rankingHoje, seguroPorNome, tipos, totalGeral, evolucaoMap, nomeAbaUsada, coresNaoMapeadas, estoque, revisados, extras) {
+  extras = extras || {};
   // Ordenação: 1) total do trimestre desc, 2) desempate por qtd de Seguro desc
   const rankingArr = EQUIPE_ATIVA
     .map(nome => ({
@@ -220,6 +238,11 @@ function resumir(ranking, rankingHoje, seguroPorNome, tipos, totalGeral, evoluca
     totalGeral: totalGeral,
     estoque: estoque || 0,
     revisados: revisados || 0,
+    entradasMarco: extras.entradasMarco || 0,
+    entradasAbril: extras.entradasAbril || 0,
+    entradasMaio: extras.entradasMaio || 0,
+    totalEntradas: extras.totalEntradas || 0,
+    totalEncerramentos: extras.totalEncerramentos || 0,
     evolucao: evolucaoArr,
     atualizadoEm: new Date().toISOString(),
     trimestre: nomeAbaUsada,

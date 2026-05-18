@@ -227,6 +227,15 @@ function renderRevisados(dados) {
   animarNumero(el, Number(dados.revisados) || 0);
 }
 
+function renderResumoMensal(dados) {
+  const abrilEl = document.getElementById('entradasAbrilValue');
+  const totalEl = document.getElementById('totalEntradasValue');
+  const encEl   = document.getElementById('totalEncerramentosValue');
+  if (abrilEl) animarNumero(abrilEl, Number(dados.entradasAbril) || 0);
+  if (totalEl) animarNumero(totalEl, Number(dados.totalEntradas) || 0);
+  if (encEl)   animarNumero(encEl,   Number(dados.totalEncerramentos) || 0);
+}
+
 function renderFooter(dados) {
   const tot = (dados.ranking || []).reduce((s, r) => s + (r.qtdHoje || 0), 0);
   const top = [...(dados.ranking || [])]
@@ -333,6 +342,7 @@ async function refresh() {
   renderTipos(dados);
   renderRevisados(dados);
   renderEstoque(dados);
+  renderResumoMensal(dados);
   renderFooter(dados);
 }
 
