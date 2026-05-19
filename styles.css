@@ -559,10 +559,10 @@ body > * { position: relative; z-index: 1; }
 .estoque-value { color: var(--gold); }
 .revisados-value { color: #7DD09A; }
 
-/* Resumo mensal — 3 cards menores em grid (Abril | Total | Encerramentos) */
+/* Resumo mensal — 2 cards (Total Entradas | Encerramentos) */
 .resumo-mensal {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
   margin-top: 12px;
   flex: 0 0 auto;
