@@ -4,7 +4,7 @@
 
 // URL do Apps Script implantado como Web App.
 // Endpoint que serve o JSON da planilha do Silva Pimenta.
-const API_URL = 'https://script.google.com/macros/s/AKfycbwt_Mm2GpDQB5OfbhIb04r7ZJydXCwFadfrzn4IA5stu29hGxMDeR_5uXJlIMfhZhBWXA/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbw-b_BN_Gx6kpZf4zv_-kihAQVBRDfS4_XSRmX85q0xMOeH8APNh-nIZSSecjCKbueD-Q/exec';
 
 // Equipe na ordem que aparece na planilha
 // (Julia saiu, substituída por MAX em 13/05/2026)
