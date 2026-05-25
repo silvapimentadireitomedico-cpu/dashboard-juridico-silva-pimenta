@@ -53,23 +53,29 @@ async function fetchDados() {
 // Cache buster: muda a cada carga da página (auto-reload de 30min recarrega as fotos).
 // Garante que troca de foto aparece sem precisar limpar cache do navegador.
 const FOTO_VER = Date.now();
-function fotoUrl(nome) {
-  return `fotos/${nome.toLowerCase().trim()}.jpg?v=${FOTO_VER}`;
-}
+// Tenta extensões nesta ordem — .png primeiro (padrão atual), .jpg como fallback
+const FOTO_EXTS = ['png', 'jpg'];
 
 function setFotoOrInicial(el, nome) {
-  const img = new Image();
-  img.onload = () => {
-    el.style.backgroundImage = `url('${img.src}')`;
-    el.classList.add('with-image');
-    el.textContent = '';
+  const slug = nome.toLowerCase().trim();
+  const tentar = (idx) => {
+    if (idx >= FOTO_EXTS.length) {
+      // Nenhuma extensão funcionou — mostra inicial
+      el.style.backgroundImage = '';
+      el.classList.remove('with-image');
+      el.textContent = nome.charAt(0);
+      return;
+    }
+    const img = new Image();
+    img.onload = () => {
+      el.style.backgroundImage = `url('${img.src}')`;
+      el.classList.add('with-image');
+      el.textContent = '';
+    };
+    img.onerror = () => tentar(idx + 1);
+    img.src = `fotos/${slug}.${FOTO_EXTS[idx]}?v=${FOTO_VER}`;
   };
-  img.onerror = () => {
-    el.style.backgroundImage = '';
-    el.classList.remove('with-image');
-    el.textContent = nome.charAt(0);
-  };
-  img.src = fotoUrl(nome);
+  tentar(0);
 }
 
 // Toca "ding-dong" curto via Web Audio API quando o 1º lugar troca.
