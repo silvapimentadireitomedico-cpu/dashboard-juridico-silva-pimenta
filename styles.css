@@ -229,7 +229,7 @@ body > * { position: relative; z-index: 1; }
   border-radius: 50%;
   background-color: var(--teal);
   background-size: cover;
-  background-position: center top;
+  background-position: center center;
   border: 4px solid var(--white);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   position: relative;
@@ -445,7 +445,7 @@ body > * { position: relative; z-index: 1; }
   border-radius: 50%;
   background-color: var(--teal-light);
   background-size: cover;
-  background-position: center top;
+  background-position: center center;
   border: 2px solid var(--gold);
   display: flex;
   align-items: center;
