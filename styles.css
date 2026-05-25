@@ -227,9 +227,10 @@ body > * { position: relative; z-index: 1; }
   width: 100%;
   aspect-ratio: 1;
   border-radius: 50%;
-  background-color: var(--teal);
-  background-size: cover;
+  background-color: var(--teal-deep);
+  background-size: contain;
   background-position: center center;
+  background-repeat: no-repeat;
   border: 4px solid var(--white);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   position: relative;
@@ -443,9 +444,10 @@ body > * { position: relative; z-index: 1; }
 .ranking-photo {
   width: 52px; height: 52px;
   border-radius: 50%;
-  background-color: var(--teal-light);
-  background-size: cover;
+  background-color: var(--teal-deep);
+  background-size: contain;
   background-position: center center;
+  background-repeat: no-repeat;
   border: 2px solid var(--gold);
   display: flex;
   align-items: center;
