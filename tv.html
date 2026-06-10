@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Silva Pimenta — TV</title>
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: #101418;
+      overflow: hidden;
+    }
+    iframe {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      border: 0;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      pointer-events: none;
+    }
+    iframe.ativo {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  </style>
+</head>
+<body>
+  <!-- Os dois dashboards ficam carregados o tempo todo (cada um segue
+       buscando dados da própria API a cada 30s). A rotação só alterna
+       a visibilidade com crossfade — sem recarregar nada. -->
+  <iframe id="dashIniciais" class="ativo"
+          src="https://silvapimentadireitomedico-cpu.github.io/dashboard-juridico-silva-pimenta/"
+          title="Dashboard de Iniciais"></iframe>
+  <iframe id="dashEncerramentos"
+          src="https://silvapimentadireitomedico-cpu.github.io/dashboard-encerramentos-silva-pimenta/"
+          title="Dashboard de Encerramentos"></iframe>
+
+  <script>
+    // Tempo de exibição de cada dashboard antes de trocar
+    const TROCA_MS = 30000;
+
+    const frames = [
+      document.getElementById('dashIniciais'),
+      document.getElementById('dashEncerramentos')
+    ];
+    let atual = 0;
+
+    setInterval(() => {
+      atual = 1 - atual;
+      frames.forEach((f, i) => f.classList.toggle('ativo', i === atual));
+    }, TROCA_MS);
+
+    // Wake Lock no topo — os iframes têm o próprio keepalive,
+    // mas o pedido daqui cobre a página rotadora inteira.
+    (async function pedirWakeLock() {
+      if (!('wakeLock' in navigator)) return;
+      let lock = null;
+      const requisitar = async () => {
+        try {
+          lock = await navigator.wakeLock.request('screen');
+        } catch (e) {}
+      };
+      await requisitar();
+      document.addEventListener('visibilitychange', async () => {
+        if (document.visibilityState === 'visible' && (!lock || lock.released)) {
+          await requisitar();
+        }
+      });
+    })();
+
+    // Rede de segurança contra Silk Browser bugado: recarrega tudo a cada 30 min
+    setTimeout(() => location.reload(), 30 * 60 * 1000);
+  </script>
+</body>
+</html>
