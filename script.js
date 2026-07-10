@@ -4,7 +4,8 @@
 
 // URL do Apps Script implantado como Web App.
 // Endpoint que serve o JSON da planilha do Silva Pimenta.
-const API_URL = 'https://script.google.com/macros/s/AKfycbw-b_BN_Gx6kpZf4zv_-kihAQVBRDfS4_XSRmX85q0xMOeH8APNh-nIZSSecjCKbueD-Q/exec';
+// APOSENTADO (10/07/2026): Apps Script substituido pelo motor dados-planilha.js
+const API_URL = null;
 
 // Equipe na ordem que aparece na planilha
 // (Julia saiu, substituída por MAX em 13/05/2026)
@@ -35,13 +36,10 @@ let ultimoLider = null;
 // =========================================================
 
 async function fetchDados() {
-  const url = API_URL || 'data-mock.json';
   try {
-    const r = await fetch(url + (API_URL ? '?_=' + Date.now() : ''));
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    return await r.json();
+    return await montarDadosDaPlanilha();
   } catch (err) {
-    console.error('Erro buscando dados:', err);
+    console.error('Erro lendo a planilha:', err);
     return null;
   }
 }
