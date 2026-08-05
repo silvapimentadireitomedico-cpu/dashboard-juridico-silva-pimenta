@@ -846,61 +846,28 @@ footer.footer {
 }
 
 /* =========================================================
-   INSPETORA FERNANDA — detetive com lupa vigiando (05/08/2026)
-   v2: FIXA num canto livre (sem patrulha), menor, sem sobrepor nada
+   INSPETORA FERNANDA (avatar) — vigia quem está no VERMELHO (sem produção hoje)
    ========================================================= */
 .inspetora {
   position: absolute;
   right: 215px;
-  bottom: 0px;
-  z-index: 50;
+  bottom: 0;
+  z-index: 60;
   pointer-events: none;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2px;
 }
-.inspetora-lupa {
-  position: relative;
-  width: 70px;
-  height: 88px;
-  animation: insp-balanco 3.4s ease-in-out infinite;
-  transform-origin: 50% 20%;
-}
-.inspetora-lente {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  border: 5px solid var(--gold, #C5A57A);
-  box-shadow: 0 0 0 2px rgba(0,0,0,.35), 0 6px 16px rgba(0,0,0,.45), inset 0 0 14px rgba(255,255,255,.18);
-  background-image: url('fotos/fernanda.png');
-  background-size: 150%;
-  background-position: center 22%;
-  background-color: var(--teal-deep, #123);
-  animation: insp-zoom 9s ease-in-out infinite;
-}
-.inspetora-olho {
-  position: absolute;
-  top: 12px;
-  left: 50%;
-  transform: translateX(-50%) scale(0);
-  font-size: 36px;
-  filter: drop-shadow(0 3px 6px rgba(0,0,0,.5));
-  animation: insp-espiada 9s ease-in-out infinite;
-}
-.inspetora-cabo {
-  position: absolute;
-  bottom: -4px;
-  right: 0px;
-  width: 11px;
-  height: 32px;
-  border-radius: 7px;
-  background: linear-gradient(180deg, #8a6f47, #5d4a2e);
-  transform: rotate(-38deg);
-  box-shadow: 0 3px 8px rgba(0,0,0,.4);
+.inspetora-img {
+  height: 118px;
+  width: auto;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,.45));
+  animation: insp-balanco 3.6s ease-in-out infinite;
+  transform-origin: 50% 85%;
 }
 .inspetora-tag {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: .8px;
   color: var(--gold, #C5A57A);
@@ -910,18 +877,20 @@ footer.footer {
   padding: 3px 9px;
   white-space: nowrap;
 }
+/* modo VIGIANDO: dentro da linha de quem não produziu hoje */
+.ranking-item .inspetora {
+  position: absolute;
+  right: 70px;
+  bottom: -6px;
+  animation: insp-pop .5s cubic-bezier(.2,1.4,.4,1);
+}
+.ranking-item .inspetora .inspetora-img { height: 80px; }
+.ranking-item .inspetora .inspetora-tag { font-size: 9px; padding: 2px 7px; }
 @keyframes insp-balanco {
-  0%, 100% { transform: rotate(-6deg); }
-  50%      { transform: rotate(8deg); }
+  0%, 100% { transform: rotate(-3deg); }
+  50%      { transform: rotate(4deg); }
 }
-@keyframes insp-zoom {
-  0%, 62%, 100% { background-size: 150%; background-position: center 22%; }
-  70%, 86%      { background-size: 240%; background-position: center 12%; }
-}
-@keyframes insp-espiada {
-  0%, 66%  { transform: translateX(-50%) scale(0); opacity: 0; }
-  72%      { transform: translateX(-50%) scale(1.25); opacity: 1; }
-  78%      { transform: translateX(-50%) scale(1.0); opacity: 1; }
-  84%      { transform: translateX(-50%) scale(1.15); opacity: 1; }
-  90%, 100%{ transform: translateX(-50%) scale(0); opacity: 0; }
+@keyframes insp-pop {
+  from { transform: scale(.3); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
 }

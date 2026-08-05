@@ -442,3 +442,25 @@ function tocarSomInspetora() {
   } catch (e) { /* autoplay bloqueado: silencia */ }
 }
 setInterval(tocarSomInspetora, 180000);
+
+
+// Inspetora Fernanda VIGIA quem está no vermelho (sem produção hoje).
+// Alterna entre os .sem-hoje a cada 8s; sem devedores, volta pro canto do rodapé.
+let __vigiaIdx = 0;
+function moverInspetora() {
+  const insp = document.getElementById('inspetora');
+  if (!insp) return;
+  const alvos = document.querySelectorAll('.ranking-item.sem-hoje');
+  if (!alvos.length) {
+    if (insp.parentElement !== document.querySelector('.dashboard-container')) {
+      document.querySelector('.dashboard-container').appendChild(insp);
+    }
+    return;
+  }
+  const alvo = alvos[__vigiaIdx % alvos.length];
+  __vigiaIdx++;
+  if (insp.parentElement !== alvo) alvo.appendChild(insp);
+  else { alvo.removeChild(insp); alvo.appendChild(insp); } // re-dispara o pop
+}
+setInterval(moverInspetora, 8000);
+setTimeout(moverInspetora, 4000);
