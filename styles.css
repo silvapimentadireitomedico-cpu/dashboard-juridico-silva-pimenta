@@ -860,14 +860,14 @@ footer.footer {
   gap: 2px;
 }
 .inspetora-img {
-  height: 118px;
+  height: 236px;
   width: auto;
   filter: drop-shadow(0 6px 14px rgba(0,0,0,.45));
   animation: insp-balanco 3.6s ease-in-out infinite;
   transform-origin: 50% 85%;
 }
 .inspetora-tag {
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: .8px;
   color: var(--gold, #C5A57A);
@@ -880,7 +880,7 @@ footer.footer {
 /* modo VIGIANDO: voa por coordenadas até a linha de quem não produziu hoje */
 .inspetora { transition: left .9s cubic-bezier(.35,1.2,.35,1), top .9s cubic-bezier(.35,1.2,.35,1); }
 .inspetora.vigiando { right: auto; bottom: auto; }
-.inspetora.vigiando .inspetora-img { height: 84px; }
+.inspetora.vigiando .inspetora-img { height: 168px; }
 .inspetora.vigiando .inspetora-tag { font-size: 9px; padding: 2px 7px; }
 @keyframes insp-balanco {
   0%, 100% { transform: rotate(-3deg); }
