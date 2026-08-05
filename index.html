@@ -34,49 +34,72 @@
     </div>
   </header>
 
-  <section class="podium" id="podium">
-    <div class="podium-place podium-2" id="podium2">
-      <div class="podium-photo-wrap">
-        <div class="podium-medal">2º</div>
-        <div class="podium-photo"></div>
-      </div>
-      <div class="podium-name">—</div>
-      <div class="podium-count">
-        <span class="podium-count-num" data-count="0">0</span>
-        <span class="podium-count-label">iniciais</span>
+  <section class="podium podium-duplo" id="podium">
+    <div class="podium-grupo">
+      <div class="podium-grupo-titulo">⚖️ Advogados</div>
+      <div class="podium-grupo-linha">
+        <div class="podium-place podium-1" id="podium-adv-1">
+          <div class="crown">★</div>
+          <div class="podium-photo-wrap">
+            <div class="podium-medal">1º</div>
+            <div class="podium-photo"></div>
+          </div>
+          <div class="podium-name">—</div>
+          <div class="podium-count">
+            <span class="podium-count-num" data-count="0">0</span>
+            <span class="podium-count-label">iniciais · prazos</span>
+          </div>
+        </div>
+        <div class="podium-place podium-2" id="podium-adv-2">
+          <div class="podium-photo-wrap">
+            <div class="podium-medal">2º</div>
+            <div class="podium-photo"></div>
+          </div>
+          <div class="podium-name">—</div>
+          <div class="podium-count">
+            <span class="podium-count-num" data-count="0">0</span>
+            <span class="podium-count-label">iniciais · prazos</span>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="podium-place podium-1" id="podium1">
-      <div class="crown">★</div>
-      <div class="podium-photo-wrap">
-        <div class="podium-medal">1º</div>
-        <div class="podium-photo"></div>
-      </div>
-      <div class="podium-name">—</div>
-      <div class="podium-count">
-        <span class="podium-count-num" data-count="0">0</span>
-        <span class="podium-count-label">iniciais</span>
-      </div>
-    </div>
-
-    <div class="podium-place podium-3" id="podium3">
-      <div class="podium-photo-wrap">
-        <div class="podium-medal">3º</div>
-        <div class="podium-photo"></div>
-      </div>
-      <div class="podium-name">—</div>
-      <div class="podium-count">
-        <span class="podium-count-num" data-count="0">0</span>
-        <span class="podium-count-label">iniciais</span>
+    <div class="podium-grupo">
+      <div class="podium-grupo-titulo">📚 Estagiários</div>
+      <div class="podium-grupo-linha">
+        <div class="podium-place podium-1" id="podium-est-1">
+          <div class="crown">★</div>
+          <div class="podium-photo-wrap">
+            <div class="podium-medal">1º</div>
+            <div class="podium-photo"></div>
+          </div>
+          <div class="podium-name">—</div>
+          <div class="podium-count">
+            <span class="podium-count-num" data-count="0">0</span>
+            <span class="podium-count-label">iniciais · prazos</span>
+          </div>
+        </div>
+        <div class="podium-place podium-2" id="podium-est-2">
+          <div class="podium-photo-wrap">
+            <div class="podium-medal">2º</div>
+            <div class="podium-photo"></div>
+          </div>
+          <div class="podium-name">—</div>
+          <div class="podium-count">
+            <span class="podium-count-num" data-count="0">0</span>
+            <span class="podium-count-label">iniciais · prazos</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <section class="middle">
     <div class="middle-left">
-      <h2 class="section-title">Ranking Geral</h2>
-      <div class="ranking-list" id="rankingList"><!-- preenchido via JS --></div>
+      <h2 class="section-title">Ranking · Advogados</h2>
+      <div class="ranking-list" id="rankingAdv"><!-- preenchido via JS --></div>
+      <h2 class="section-title" style="margin-top:14px">Ranking · Estagiários</h2>
+      <div class="ranking-list" id="rankingEst"><!-- preenchido via JS --></div>
     </div>
     <div class="middle-right">
       <h2 class="section-title">Tipos de Processo</h2>

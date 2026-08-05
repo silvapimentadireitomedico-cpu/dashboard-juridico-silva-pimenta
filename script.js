@@ -8,8 +8,13 @@
 const API_URL = null;
 
 // Equipe na ordem que aparece na planilha
-// (Julia saiu, substituída por MAX em 13/05/2026)
-const EQUIPE = ['MAX', 'HUGO', 'STELLA', 'RAFAEL', 'NATALY', 'ISABELLA', 'ANA', 'SUELLEN'];
+// (Julia saiu 13/05; Hugo e Rafael saíram — removidos 05/08/2026)
+const EQUIPE = ['MAX', 'STELLA', 'NATALY', 'ISABELLA', 'ANA', 'SUELLEN'];
+
+// Divisão do William (05/08/2026): ADVOGADOS x ESTAGIÁRIOS.
+// Quem NÃO está na lista de advogados conta como estagiário (novos entram sozinhos).
+const ADVOGADOS = ['ANA', 'SUELLEN', 'MAX'];
+const ehAdvogado = (nome) => ADVOGADOS.includes(String(nome || '').trim().toUpperCase());
 
 // Cores das pílulas dos tipos de processo
 const COR_TIPO = {
@@ -136,25 +141,27 @@ function renderHeader(dados) {
   animarNumero(totalEl, dados.totalGeral || 0);
 }
 
+// Pódio por GRUPO (William 05/08): 2 lugares de ADVOGADOS + 2 de ESTAGIÁRIOS.
+// ids: podium-adv-1/2 e podium-est-1/2.
 function renderPodio(dados) {
-  const top3 = (dados.ranking || []).slice(0, 3);
+  const ranking = dados.ranking || [];
+  const adv = ranking.filter(r => ehAdvogado(r.nome));
+  const est = ranking.filter(r => !ehAdvogado(r.nome));
 
-  // Detecta troca de 1º lugar e toca som (não toca na 1ª carga)
-  const liderAtual = top3[0] ? top3[0].nome : null;
-  if (ultimoLider !== null && liderAtual && liderAtual !== ultimoLider) {
-    tocarSomNovoLider();
-  }
-  if (liderAtual) ultimoLider = liderAtual;
+  // som quando troca o 1º de qualquer grupo (chave composta)
+  const liderAtual = (adv[0] ? adv[0].nome : '-') + '|' + (est[0] ? est[0].nome : '-');
+  if (ultimoLider !== null && liderAtual !== ultimoLider) tocarSomNovoLider();
+  ultimoLider = liderAtual;
 
-  // ordem na tela: 2º (esq), 1º (centro), 3º (dir)
-  const ordem = [
-    { idx: 1, el: 'podium2' },
-    { idx: 0, el: 'podium1' },
-    { idx: 2, el: 'podium3' }
+  const slots = [
+    { item: adv[0], el: 'podium-adv-1' },
+    { item: adv[1], el: 'podium-adv-2' },
+    { item: est[0], el: 'podium-est-1' },
+    { item: est[1], el: 'podium-est-2' }
   ];
-  ordem.forEach(({ idx, el }) => {
+  slots.forEach(({ item, el }) => {
     const nodeEl = document.getElementById(el);
-    const item = top3[idx];
+    if (!nodeEl) return;
     const nameEl = nodeEl.querySelector('.podium-name');
     const numEl = nodeEl.querySelector('.podium-count-num');
     const photoEl = nodeEl.querySelector('.podium-photo');
@@ -163,6 +170,8 @@ function renderPodio(dados) {
       numEl.textContent = '0';
       numEl.dataset.count = 0;
       photoEl.style.backgroundImage = '';
+      photoEl.classList.remove('with-image');
+      photoEl.textContent = '';
       return;
     }
     nameEl.textContent = capitalize(item.nome);
@@ -171,13 +180,10 @@ function renderPodio(dados) {
   });
 }
 
-function renderRanking(dados) {
-  const list = document.getElementById('rankingList');
+function renderRankingLista(elId, ranking, max) {
+  const list = document.getElementById(elId);
+  if (!list) return;
   list.innerHTML = '';
-  const ranking = dados.ranking || [];
-  if (ranking.length === 0) return;
-  const max = Math.max(...ranking.map(r => r.qtd), 1);
-
   ranking.forEach((item, i) => {
     const row = document.createElement('div');
     const semHoje = (item.qtdHoje || 0) === 0;
@@ -192,12 +198,19 @@ function renderRanking(dados) {
       <div class="ranking-qtd">${item.qtd}</div>
     `;
     list.appendChild(row);
-    const photoEl = row.querySelector('.ranking-photo');
-    setFotoOrInicial(photoEl, item.nome);
+    setFotoOrInicial(row.querySelector('.ranking-photo'), item.nome);
     requestAnimationFrame(() => {
       row.querySelector('.ranking-bar').style.width = ((item.qtd / max) * 100) + '%';
     });
   });
+}
+
+function renderRanking(dados) {
+  const ranking = dados.ranking || [];
+  if (ranking.length === 0) return;
+  const max = Math.max(...ranking.map(r => r.qtd), 1);  // régua única: barras comparáveis entre grupos
+  renderRankingLista('rankingAdv', ranking.filter(r => ehAdvogado(r.nome)), max);
+  renderRankingLista('rankingEst', ranking.filter(r => !ehAdvogado(r.nome)), max);
 }
 
 function renderTipos(dados) {

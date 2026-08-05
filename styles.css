@@ -211,6 +211,38 @@ body > * { position: relative; z-index: 1; }
 }
 .podium > .podium-1 { flex-grow: 1.2; }
 
+/* Pódio DUPLO (05/08/2026): Advogados x Estagiários, 2 lugares cada */
+.podium-duplo { align-items: stretch; gap: 40px; }
+.podium-duplo .podium-grupo {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px 4px;
+  border: 1px solid rgba(197, 165, 122, .25);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .02);
+}
+.podium-duplo .podium-grupo-titulo {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gold, #C5A57A);
+  letter-spacing: .5px;
+}
+.podium-duplo .podium-grupo-linha {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 28px;
+  width: 100%;
+}
+.podium-duplo .podium-grupo-linha .podium-place { flex: 1 1 0; max-width: 46%; }
+.podium-duplo .podium-1 .podium-photo-wrap { width: 140px; }
+.podium-duplo .podium-2 .podium-photo-wrap { width: 112px; }
+
 .podium-place {
   text-align: center;
   position: relative;
@@ -424,12 +456,12 @@ body > * { position: relative; z-index: 1; }
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 14px;
-  padding: 6px 0;
+  gap: 12px;
+  padding: 3px 0;   /* compactado 05/08: 2 rankings (advogados + estagiários) na mesma coluna */
   position: relative;
 }
-.ranking-item > .ranking-pos { flex: 0 0 36px; }
-.ranking-item > .ranking-photo { flex: 0 0 52px; }
+.ranking-item > .ranking-pos { flex: 0 0 32px; }
+.ranking-item > .ranking-photo { flex: 0 0 44px; }
 .ranking-item > .ranking-bar-wrap { flex: 1 1 auto; }
 .ranking-item > .ranking-qtd { flex: 0 0 auto; }
 
@@ -442,7 +474,7 @@ body > * { position: relative; z-index: 1; }
 }
 
 .ranking-photo {
-  width: 52px; height: 52px;
+  width: 44px; height: 44px;
   border-radius: 50%;
   background-color: var(--teal-deep);
   background-size: cover;
