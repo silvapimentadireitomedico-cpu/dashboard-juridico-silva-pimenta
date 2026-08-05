@@ -1,0 +1,8 @@
+/* Dashboard Jurídico MENSAL — mesma estrutura, paleta BORDÔ + gold (05/08/2026) */
+@import url('../styles.css');
+:root {
+  --teal: #5A2036;        /* bordô */
+  --teal-deep: #2B0E1A;   /* fundo vinho profundo */
+  --teal-light: #7A3A50;
+}
+.inspetora-lente { background-image: url('../fotos/fernanda.png'); }

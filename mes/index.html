@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Silva Pimenta — Setor Jurídico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Keepalive: video invisivel em loop pra impedir TV/Fire Stick de dormir -->
+  <video class="keepalive" src="../keepalive.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+
+  <div class="dashboard-wrapper">
+   <div class="dashboard-container">
+  <div class="bg-decoration">
+    <div class="bg-circle bg-circle-1"></div>
+    <div class="bg-circle bg-circle-2"></div>
+  </div>
+
+  <header class="header">
+    <div class="brand">
+      <img src="../logo.png" alt="Silva Pimenta" class="brand-logo">
+    </div>
+    <div class="period">
+      <div class="period-label">Setor Jurídico · <span id="trimestreValue">Mês</span></div>
+      <div class="period-value" id="periodValue">Maio · 2026</div>
+    </div>
+    <div class="total-box">
+      <div class="total-label">Total do mês</div>
+      <div class="total-value" id="totalValue">—</div>
+    </div>
+  </header>
+
+
+  <section class="grupos">
+    <div class="grupo-col">
+<div class="podium-grupo">
+      <div class="podium-grupo-titulo">⚖️ Advogados</div>
+      <div class="podium-grupo-linha">
+        <div class="podium-place podium-1" id="podium-adv-1">
+          <div class="crown">★</div>
+          <div class="podium-photo-wrap">
+            <div class="podium-medal">1º</div>
+            <div class="podium-photo"></div>
+          </div>
+          <div class="podium-name">—</div>
+          <div class="podium-count">
+            <span class="podium-count-num" data-count="0">0</span>
+            <span class="podium-count-label">iniciais · prazos</span>
+          </div>
+        </div>
+        <div class="podium-place podium-2" id="podium-adv-2">
+          <div class="podium-photo-wrap">
+            <div class="podium-medal">2º</div>
+            <div class="podium-photo"></div>
+          </div>
+          <div class="podium-name">—</div>
+          <div class="podium-count">
+            <span class="podium-count-num" data-count="0">0</span>
+            <span class="podium-count-label">iniciais · prazos</span>
+          </div>
+        </div>
+      </div>
+</div>
+      <h2 class="section-title">Ranking · Advogados</h2>
+      <div class="ranking-list" id="rankingAdv"><!-- preenchido via JS --></div>
+    </div>
+    <div class="grupo-col">
+<div class="podium-grupo">
+      <div class="podium-grupo-titulo">📚 Estagiários</div>
+      <div class="podium-grupo-linha">
+        <div class="podium-place podium-1" id="podium-est-1">
+          <div class="crown">★</div>
+          <div class="podium-photo-wrap">
+            <div class="podium-medal">1º</div>
+            <div class="podium-photo"></div>
+          </div>
+          <div class="podium-name">—</div>
+          <div class="podium-count">
+            <span class="podium-count-num" data-count="0">0</span>
+            <span class="podium-count-label">iniciais · prazos</span>
+          </div>
+        </div>
+        <div class="podium-place podium-2" id="podium-est-2">
+          <div class="podium-photo-wrap">
+            <div class="podium-medal">2º</div>
+            <div class="podium-photo"></div>
+          </div>
+          <div class="podium-name">—</div>
+          <div class="podium-count">
+            <span class="podium-count-num" data-count="0">0</span>
+            <span class="podium-count-label">iniciais · prazos</span>
+          </div>
+        </div>
+      </div>
+</div>
+      <h2 class="section-title">Ranking · Estagiários</h2>
+      <div class="ranking-list" id="rankingEst"><!-- preenchido via JS --></div>
+    </div>
+  </section>
+
+  <section class="bottom">
+    <div class="bottom-tipos">
+      <h2 class="section-title">Tipos de Processo</h2>
+      <div class="tipos-grid" id="tiposGrid"><!-- preenchido via JS --></div>
+    </div>
+    <div class="bottom-kpis">
+      <div class="kpi-card kpi-revisados">
+        <div class="kpi-label">Revisados</div>
+        <div class="kpi-value" id="revisadosValue" data-count="0">—</div>
+      </div>
+      <div class="kpi-card kpi-estoque">
+        <div class="kpi-label">Estoque</div>
+        <div class="kpi-value" id="estoqueValue" data-count="0">—</div>
+      </div>
+      <div class="kpi-card kpi-entradas">
+        <div class="kpi-label">Total Entradas</div>
+        <div class="kpi-value" id="totalEntradasValue" data-count="0">—</div>
+      </div>
+      <div class="kpi-card kpi-encerr">
+        <div class="kpi-label">Encerramentos</div>
+        <div class="kpi-value" id="totalEncerramentosValue" data-count="0">—</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Inspetora Fernanda: detetive com lupa, vigiando o setor (William 05/08) -->
+  <div class="inspetora" aria-hidden="true">
+    <div class="inspetora-lupa">
+      <div class="inspetora-lente"></div>
+      <div class="inspetora-olho">👁️</div>
+      <div class="inspetora-cabo"></div>
+    </div>
+    <div class="inspetora-tag">🕵️‍♀️ Inspetora Fernanda</div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-today">
+      <span class="footer-today-icon">●</span>
+      <span id="footerToday">Aguardando dados de hoje</span>
+    </div>
+    <div class="footer-update">
+      Atualizado em <span id="footerTime">—</span>
+    </div>
+  </footer>
+   </div>
+  </div>
+
+  <script src="../xlsx.full.min.js"></script>
+  <script src="dados-planilha.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
