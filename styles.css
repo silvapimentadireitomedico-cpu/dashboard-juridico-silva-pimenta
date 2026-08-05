@@ -544,7 +544,7 @@ body > * { position: relative; z-index: 1; }
 }
 .chart-value {
   fill: var(--gold);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   font-family: 'Inter', sans-serif;
   text-anchor: middle;
@@ -847,32 +847,32 @@ footer.footer {
 
 /* =========================================================
    INSPETORA FERNANDA — detetive com lupa vigiando (05/08/2026)
+   v2: FIXA num canto livre (sem patrulha), menor, sem sobrepor nada
    ========================================================= */
 .inspetora {
   position: absolute;
-  right: 40px;
-  bottom: 64px;
+  right: 215px;
+  bottom: 0px;
   z-index: 50;
   pointer-events: none;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  animation: insp-patrulha 46s ease-in-out infinite;
 }
 .inspetora-lupa {
   position: relative;
-  width: 120px;
-  height: 150px;
+  width: 70px;
+  height: 88px;
   animation: insp-balanco 3.4s ease-in-out infinite;
   transform-origin: 50% 20%;
 }
 .inspetora-lente {
-  width: 112px;
-  height: 112px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  border: 7px solid var(--gold, #C5A57A);
-  box-shadow: 0 0 0 3px rgba(0,0,0,.35), 0 8px 22px rgba(0,0,0,.45), inset 0 0 18px rgba(255,255,255,.18);
+  border: 5px solid var(--gold, #C5A57A);
+  box-shadow: 0 0 0 2px rgba(0,0,0,.35), 0 6px 16px rgba(0,0,0,.45), inset 0 0 14px rgba(255,255,255,.18);
   background-image: url('fotos/fernanda.png');
   background-size: 150%;
   background-position: center 22%;
@@ -881,53 +881,43 @@ footer.footer {
 }
 .inspetora-olho {
   position: absolute;
-  top: 22px;
+  top: 12px;
   left: 50%;
   transform: translateX(-50%) scale(0);
-  font-size: 62px;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,.5));
+  font-size: 36px;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,.5));
   animation: insp-espiada 9s ease-in-out infinite;
 }
 .inspetora-cabo {
   position: absolute;
-  bottom: -8px;
-  right: 2px;
-  width: 14px;
-  height: 52px;
-  border-radius: 8px;
+  bottom: -4px;
+  right: 0px;
+  width: 11px;
+  height: 32px;
+  border-radius: 7px;
   background: linear-gradient(180deg, #8a6f47, #5d4a2e);
   transform: rotate(-38deg);
-  box-shadow: 0 4px 10px rgba(0,0,0,.4);
+  box-shadow: 0 3px 8px rgba(0,0,0,.4);
 }
 .inspetora-tag {
-  font-size: 13.5px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: .8px;
   color: var(--gold, #C5A57A);
   background: rgba(10, 24, 33, .78);
   border: 1px solid rgba(197, 165, 122, .4);
-  border-radius: 12px;
-  padding: 4px 12px;
+  border-radius: 10px;
+  padding: 3px 9px;
   white-space: nowrap;
 }
-/* patrulha lenta: sai do canto direito, varre até o meio da tela e volta */
-@keyframes insp-patrulha {
-  0%   { transform: translateX(0); }
-  45%  { transform: translateX(-680px); }
-  55%  { transform: translateX(-680px); }
-  100% { transform: translateX(0); }
-}
-/* balanço de quem está inspecionando */
 @keyframes insp-balanco {
-  0%, 100% { transform: rotate(-7deg); }
-  50%      { transform: rotate(9deg); }
+  0%, 100% { transform: rotate(-6deg); }
+  50%      { transform: rotate(8deg); }
 }
-/* a foto dá um zoom na lente (efeito lupa de verdade) */
 @keyframes insp-zoom {
   0%, 62%, 100% { background-size: 150%; background-position: center 22%; }
   70%, 86%      { background-size: 240%; background-position: center 12%; }
 }
-/* o olho esbugalhado dá um POP na lente enquanto a foto está ampliada */
 @keyframes insp-espiada {
   0%, 66%  { transform: translateX(-50%) scale(0); opacity: 0; }
   72%      { transform: translateX(-50%) scale(1.25); opacity: 1; }

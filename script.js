@@ -427,3 +427,29 @@ setTimeout(() => {
 
 refresh();
 setInterval(refresh, POLL_MS);
+
+
+// Som da Inspetora Fernanda: "sonar de lupa" curtinho, no MÁXIMO 1x a cada 3 min
+// (Web Audio, mesmo esquema do ding-dong; silencia se autoplay bloquear)
+function tocarSomInspetora() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const tom = (freq, inicio, dur, vol) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.value = freq;
+      const t0 = ctx.currentTime + inicio;
+      gain.gain.setValueAtTime(0, t0);
+      gain.gain.linearRampToValueAtTime(vol, t0 + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(t0); osc.stop(t0 + dur);
+    };
+    tom(660, 0, 0.25, 0.18);      // "tu"
+    tom(990, 0.22, 0.35, 0.16);   // "dum" (subida de quem achou algo)
+  } catch (e) { /* autoplay bloqueado: silencia */ }
+}
+setInterval(tocarSomInspetora, 180000);
