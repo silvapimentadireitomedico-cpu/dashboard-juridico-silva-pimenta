@@ -25,19 +25,30 @@ const PAINEIS = [
 ];
 const TEMPO_MS = 45000;
 let idx = 0, mostrando = 'fa';
+function mostrar(el, prox) {
+  document.getElementById(mostrando).classList.remove('on');
+  el.classList.add('on');
+  mostrando = prox;
+}
 function trocar() {
   idx = (idx + 1) % PAINEIS.length;
   const prox = mostrando === 'fa' ? 'fb' : 'fa';
   const el = document.getElementById(prox);
-  el.src = PAINEIS[idx];
-  el.onload = () => {
-    document.getElementById(mostrando).classList.remove('on');
-    el.classList.add('on');
-    mostrando = prox;
-    setTimeout(() => { const outro = mostrando === 'fa' ? 'fb' : 'fa'; document.getElementById(outro).src = 'about:blank'; }, 1500);
-  };
+  let trocou = false;
+  el.onload = () => { if (!trocou) { trocou = true; mostrar(el, prox); } };
+  el.src = PAINEIS[idx] + (PAINEIS[idx].includes('?') ? '&' : '?') + 'cb=' + Date.now();
+  // fallback: se o onload não vier em 8s, mostra assim mesmo (evita ficar preso)
+  setTimeout(() => { if (!trocou) { trocou = true; mostrar(el, prox); } }, 8000);
 }
 setInterval(trocar, TEMPO_MS);
+// watchdog: iframe visível vazio (deploy no meio, falha de rede) -> recarrega
+setInterval(() => {
+  try {
+    const f = document.getElementById(mostrando);
+    const d = f.contentDocument;
+    if (!d || !d.body || d.body.children.length === 0) { f.src = f.src; }
+  } catch (e) { /* cross-origin improvável (mesmo host); ignora */ }
+}, 12000);
 // keepalive: wake lock + reload periódico (mesmas 3 camadas dos painéis)
 (async function(){ if(!('wakeLock' in navigator))return; const req=async()=>{try{await navigator.wakeLock.request('screen');}catch(e){}};
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')req();}); req(); })();

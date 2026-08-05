@@ -456,22 +456,29 @@ setInterval(tocarSomInspetora, 180000);
 
 
 // Inspetora Fernanda VIGIA quem está no vermelho (sem produção hoje).
-// Alterna entre os .sem-hoje a cada 8s; sem devedores, volta pro canto do rodapé.
+// v2: NÃO entra no DOM da linha (refresh dos dados a destruía) — VOA por coordenadas
+// até a pessoa, alternando a cada 4s; sem devedores, volta pro canto do rodapé.
 let __vigiaIdx = 0;
 function moverInspetora() {
   const insp = document.getElementById('inspetora');
-  if (!insp) return;
+  const cont = document.querySelector('.dashboard-container');
+  if (!insp || !cont) return;
   const alvos = document.querySelectorAll('.ranking-item.sem-hoje');
   if (!alvos.length) {
-    if (insp.parentElement !== document.querySelector('.dashboard-container')) {
-      document.querySelector('.dashboard-container').appendChild(insp);
-    }
+    insp.classList.remove('vigiando');
+    insp.style.left = ''; insp.style.top = '';
     return;
   }
   const alvo = alvos[__vigiaIdx % alvos.length];
   __vigiaIdx++;
-  if (insp.parentElement !== alvo) alvo.appendChild(insp);
-  else { alvo.removeChild(insp); alvo.appendChild(insp); } // re-dispara o pop
+  const cr = cont.getBoundingClientRect();
+  const ar = alvo.getBoundingClientRect();
+  const scale = cr.width / 1920;
+  const left = (ar.right - cr.left) / scale - 150;  // à direita da linha, antes do número
+  const top  = (ar.top - cr.top) / scale - 46;      // avatar "atrás" da barra, espiando
+  insp.classList.add('vigiando');
+  insp.style.left = left + 'px';
+  insp.style.top  = top + 'px';
 }
-setInterval(moverInspetora, 8000);
-setTimeout(moverInspetora, 4000);
+setInterval(moverInspetora, 4000);
+setTimeout(moverInspetora, 3000);

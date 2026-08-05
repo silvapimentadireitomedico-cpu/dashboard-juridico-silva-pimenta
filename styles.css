@@ -877,15 +877,11 @@ footer.footer {
   padding: 3px 9px;
   white-space: nowrap;
 }
-/* modo VIGIANDO: dentro da linha de quem não produziu hoje */
-.ranking-item .inspetora {
-  position: absolute;
-  right: 70px;
-  bottom: -6px;
-  animation: insp-pop .5s cubic-bezier(.2,1.4,.4,1);
-}
-.ranking-item .inspetora .inspetora-img { height: 80px; }
-.ranking-item .inspetora .inspetora-tag { font-size: 9px; padding: 2px 7px; }
+/* modo VIGIANDO: voa por coordenadas até a linha de quem não produziu hoje */
+.inspetora { transition: left .9s cubic-bezier(.35,1.2,.35,1), top .9s cubic-bezier(.35,1.2,.35,1); }
+.inspetora.vigiando { right: auto; bottom: auto; }
+.inspetora.vigiando .inspetora-img { height: 84px; }
+.inspetora.vigiando .inspetora-tag { font-size: 9px; padding: 2px 7px; }
 @keyframes insp-balanco {
   0%, 100% { transform: rotate(-3deg); }
   50%      { transform: rotate(4deg); }
