@@ -211,6 +211,72 @@ body > * { position: relative; z-index: 1; }
 }
 .podium > .podium-1 { flex-grow: 1.2; }
 
+/* Layout em COLUNAS por grupo (William 05/08): pódio + ranking juntos; tipos e KPIs na faixa de baixo */
+.grupos {
+  display: flex;
+  gap: 26px;
+  padding: 6px 0 2px;
+  align-items: stretch;
+}
+.grupos .grupo-col {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.grupos .grupo-col .podium-grupo { width: 100%; }
+.grupos .grupo-col .section-title { margin-top: 6px; }
+
+.bottom {
+  display: flex;
+  gap: 26px;
+  align-items: stretch;
+  padding: 8px 0 2px;
+}
+.bottom-tipos { flex: 1.35 1 0; min-width: 0; }
+.bottom-tipos .tipos-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+.bottom-tipos .tipo-card { min-width: 0; padding: 6px 12px; }
+.bottom-tipos .tipo-nome { font-size: 14px; }
+.bottom-kpis {
+  flex: 1 1 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  align-content: start;
+  margin-top: 34px;
+}
+.kpi-card {
+  border: 1px solid rgba(197, 165, 122, .3);
+  border-radius: 14px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, .02);
+}
+.kpi-label {
+  font-size: 15px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold, #C5A57A);
+  font-weight: 600;
+}
+.kpi-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 40px;
+  font-weight: 700;
+  color: #fff;
+}
+.kpi-revisados .kpi-value { color: #7EE2A8; }
+.kpi-estoque   .kpi-value { color: var(--gold, #C5A57A); }
+.kpi-encerr    .kpi-value { color: #7EE2A8; }
+
 /* Pódio DUPLO (05/08/2026): Advogados x Estagiários, 2 lugares cada */
 .podium-duplo { align-items: stretch; gap: 40px; }
 .podium-duplo .podium-grupo {
@@ -242,6 +308,38 @@ body > * { position: relative; z-index: 1; }
 .podium-duplo .podium-grupo-linha .podium-place { flex: 1 1 0; max-width: 46%; }
 .podium-duplo .podium-1 .podium-photo-wrap { width: 140px; }
 .podium-duplo .podium-2 .podium-photo-wrap { width: 112px; }
+
+/* pódio dentro das colunas (layout novo): estilos completos (antes escopados ao .podium-duplo) */
+.grupo-col .podium-grupo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px 6px;
+  border: 1px solid rgba(197, 165, 122, .25);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .02);
+}
+.grupo-col .podium-grupo-titulo {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gold, #C5A57A);
+  letter-spacing: .5px;
+}
+.grupo-col .podium-grupo-linha {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
+}
+.grupo-col .podium-grupo-linha .podium-place { flex: 0 1 auto; max-width: 46%; }
+.grupo-col .podium-1 .podium-photo-wrap { width: 118px; }
+.grupo-col .podium-2 .podium-photo-wrap { width: 96px; }
+.bottom-tipos .tipo-card { padding: 8px 12px; }
+.bottom-tipos .tipo-qtd { font-size: 26px; }
 
 .podium-place {
   text-align: center;

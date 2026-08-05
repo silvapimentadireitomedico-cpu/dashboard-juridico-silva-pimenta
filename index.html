@@ -34,8 +34,10 @@
     </div>
   </header>
 
-  <section class="podium podium-duplo" id="podium">
-    <div class="podium-grupo">
+
+  <section class="grupos">
+    <div class="grupo-col">
+<div class="podium-grupo">
       <div class="podium-grupo-titulo">⚖️ Advogados</div>
       <div class="podium-grupo-linha">
         <div class="podium-place podium-1" id="podium-adv-1">
@@ -62,9 +64,12 @@
           </div>
         </div>
       </div>
+</div>
+      <h2 class="section-title">Ranking · Advogados</h2>
+      <div class="ranking-list" id="rankingAdv"><!-- preenchido via JS --></div>
     </div>
-
-    <div class="podium-grupo">
+    <div class="grupo-col">
+<div class="podium-grupo">
       <div class="podium-grupo-titulo">📚 Estagiários</div>
       <div class="podium-grupo-linha">
         <div class="podium-place podium-1" id="podium-est-1">
@@ -91,37 +96,33 @@
           </div>
         </div>
       </div>
+</div>
+      <h2 class="section-title">Ranking · Estagiários</h2>
+      <div class="ranking-list" id="rankingEst"><!-- preenchido via JS --></div>
     </div>
   </section>
 
-  <section class="middle">
-    <div class="middle-left">
-      <h2 class="section-title">Ranking · Advogados</h2>
-      <div class="ranking-list" id="rankingAdv"><!-- preenchido via JS --></div>
-      <h2 class="section-title" style="margin-top:14px">Ranking · Estagiários</h2>
-      <div class="ranking-list" id="rankingEst"><!-- preenchido via JS --></div>
-    </div>
-    <div class="middle-right">
+  <section class="bottom">
+    <div class="bottom-tipos">
       <h2 class="section-title">Tipos de Processo</h2>
       <div class="tipos-grid" id="tiposGrid"><!-- preenchido via JS --></div>
-      <div class="revisados-card">
-        <div class="revisados-label">Revisados</div>
-        <div class="revisados-value" id="revisadosValue" data-count="0">—</div>
+    </div>
+    <div class="bottom-kpis">
+      <div class="kpi-card kpi-revisados">
+        <div class="kpi-label">Revisados</div>
+        <div class="kpi-value" id="revisadosValue" data-count="0">—</div>
       </div>
-      <div class="estoque-card">
-        <div class="estoque-label">Estoque</div>
-        <div class="estoque-value" id="estoqueValue" data-count="0">—</div>
+      <div class="kpi-card kpi-estoque">
+        <div class="kpi-label">Estoque</div>
+        <div class="kpi-value" id="estoqueValue" data-count="0">—</div>
       </div>
-
-      <div class="resumo-mensal">
-        <div class="resumo-card resumo-total">
-          <div class="resumo-label">Total Entradas</div>
-          <div class="resumo-value" id="totalEntradasValue" data-count="0">—</div>
-        </div>
-        <div class="resumo-card resumo-encerr">
-          <div class="resumo-label">Encerramentos</div>
-          <div class="resumo-value" id="totalEncerramentosValue" data-count="0">—</div>
-        </div>
+      <div class="kpi-card kpi-entradas">
+        <div class="kpi-label">Total Entradas</div>
+        <div class="kpi-value" id="totalEntradasValue" data-count="0">—</div>
+      </div>
+      <div class="kpi-card kpi-encerr">
+        <div class="kpi-label">Encerramentos</div>
+        <div class="kpi-value" id="totalEncerramentosValue" data-count="0">—</div>
       </div>
     </div>
   </section>
