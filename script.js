@@ -482,3 +482,57 @@ function moverInspetora() {
 }
 setInterval(moverInspetora, 4000);
 setTimeout(moverInspetora, 3000);
+
+
+// ============ COBRANÇA DAS 17:00 (William 05/08) ============
+// Todo dia às 17:00, se houver alguém SEM produção no dia (.sem-hoje),
+// a TV toca alerta + mostra banner gigante da Fernanda + FALA a cobrança.
+// Trava por localStorage: 1x por dia (compartilhada entre os painéis, mesma origem).
+function falarCobranca(texto) {
+  try {
+    const u = new SpeechSynthesisUtterance(texto);
+    u.lang = 'pt-BR'; u.rate = 0.95; u.pitch = 1.05; u.volume = 1;
+    const vozes = speechSynthesis.getVoices();
+    const pt = vozes.find(v => /pt[-_]BR/i.test(v.lang)) || vozes.find(v => /^pt/i.test(v.lang));
+    if (pt) u.voice = pt;
+    speechSynthesis.speak(u);
+  } catch (e) { /* sem voz: banner + som seguram */ }
+}
+function somCobranca() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    [[523,0,.18],[659,.2,.18],[784,.4,.35]].forEach(([f,i,d]) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'square'; o.frequency.value = f;
+      const t0 = ctx.currentTime + i;
+      g.gain.setValueAtTime(0, t0);
+      g.gain.linearRampToValueAtTime(.22, t0 + .02);
+      g.gain.exponentialRampToValueAtTime(.001, t0 + d);
+      o.connect(g); g.connect(ctx.destination); o.start(t0); o.stop(t0 + d);
+    });
+  } catch (e) {}
+}
+function mostrarCobranca() {
+  if (document.getElementById('cobranca-overlay')) return;
+  const ov = document.createElement('div');
+  ov.id = 'cobranca-overlay';
+  ov.innerHTML = '<img src="' + (document.querySelector('.inspetora-img') ? document.querySelector('.inspetora-img').src : '') + '" alt="">' +
+    '<div class="cobranca-txt">TEM GENTE QUE AINDA<br>NÃO FEZ HOJE, HEIN! 👀</div>';
+  (document.querySelector('.dashboard-container') || document.body).appendChild(ov);
+  somCobranca();
+  setTimeout(() => falarCobranca('Atenção! Tem gente que ainda não fez hoje, hein!'), 700);
+  setTimeout(() => ov.remove(), 22000);
+}
+function checarCobranca1700() {
+  const agora = new Date();
+  if (agora.getHours() !== 17 || agora.getMinutes() >= 2) return;
+  const key = 'fernanda-cobranca-' + agora.getFullYear() + '-' + (agora.getMonth()+1) + '-' + agora.getDate();
+  try { if (localStorage.getItem(key)) return; } catch (e) {}
+  if (!document.querySelectorAll('.ranking-item.sem-hoje').length) return;
+  try { localStorage.setItem(key, '1'); } catch (e) {}
+  mostrarCobranca();
+}
+setInterval(checarCobranca1700, 30000);
+if (location.search.indexOf('cobranca=teste') >= 0) setTimeout(mostrarCobranca, 5000);

@@ -890,3 +890,38 @@ footer.footer {
   from { transform: scale(.3); opacity: 0; }
   to   { transform: scale(1); opacity: 1; }
 }
+
+/* Cobrança das 17:00 — banner gigante da Fernanda */
+#cobranca-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  background: rgba(8, 14, 22, .82);
+  backdrop-filter: blur(3px);
+  animation: cobranca-in .55s cubic-bezier(.2,1.3,.4,1);
+  pointer-events: none;
+}
+#cobranca-overlay img {
+  height: 430px;
+  filter: drop-shadow(0 12px 34px rgba(0,0,0,.6));
+  animation: cobranca-balanco 1.1s ease-in-out infinite;
+  transform-origin: 50% 88%;
+}
+#cobranca-overlay .cobranca-txt {
+  font-family: 'Playfair Display', serif;
+  font-size: 64px;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.15;
+  color: var(--gold, #C5A57A);
+  text-shadow: 0 4px 18px rgba(0,0,0,.55);
+  animation: cobranca-pulsa 1.2s ease-in-out infinite;
+}
+@keyframes cobranca-in { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: scale(1); } }
+@keyframes cobranca-balanco { 0%,100% { transform: rotate(-4deg); } 50% { transform: rotate(5deg); } }
+@keyframes cobranca-pulsa { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }

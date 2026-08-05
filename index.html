@@ -26,9 +26,12 @@ const PAINEIS = [
 const TEMPO_MS = 45000;
 let idx = 0, mostrando = 'fa';
 function mostrar(el, prox) {
-  document.getElementById(mostrando).classList.remove('on');
+  const antigo = document.getElementById(mostrando);
+  antigo.classList.remove('on');
   el.classList.add('on');
   mostrando = prox;
+  // esvazia o iframe oculto (economiza e evita som/fala em dobro)
+  setTimeout(() => { if (antigo !== document.getElementById(mostrando)) antigo.src = 'about:blank'; }, 1600);
 }
 function trocar() {
   idx = (idx + 1) % PAINEIS.length;
