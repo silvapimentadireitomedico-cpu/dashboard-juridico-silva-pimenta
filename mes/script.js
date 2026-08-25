@@ -514,14 +514,18 @@ function mostrarCobranca() {
   setTimeout(() => falarCobranca('Atenção! Tem gente que ainda não fez hoje, hein!'), 700);
   setTimeout(() => ov.remove(), 22000);
 }
+// TV (25/08): o rotador avisa por postMessage se este painel está NA TELA; fora da TV é sempre visível.
+window.__tvVisivel = true;
+window.addEventListener('message', function (e) { if (e && e.data && e.data.tv) window.__tvVisivel = (e.data.tv === 'visible'); });
 function checarCobranca1700() {
   const agora = new Date();
   if (agora.getHours() !== 17 || agora.getMinutes() >= 2) return;
+  if (window.__tvVisivel === false) return; // só o painel visível cobra (checa a cada 5s, pega a janela de 10s do rotador)
   const key = 'fernanda-cobranca-' + agora.getFullYear() + '-' + (agora.getMonth()+1) + '-' + agora.getDate();
   try { if (localStorage.getItem(key)) return; } catch (e) {}
   if (!document.querySelectorAll('.ranking-item.sem-hoje').length) return;
   try { localStorage.setItem(key, '1'); } catch (e) {}
   mostrarCobranca();
 }
-setInterval(checarCobranca1700, 30000);
+setInterval(checarCobranca1700, 5000);
 if (location.search.indexOf('cobranca=teste') >= 0) setTimeout(mostrarCobranca, 5000);

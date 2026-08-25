@@ -6,58 +6,50 @@
 <title>Silva Pimenta — Painéis Jurídico (TV)</title>
 <style>
   html,body{margin:0;width:100%;height:100%;background:#0F2F3B;overflow:hidden}
-  iframe{position:fixed;inset:0;width:100%;height:100%;border:0;opacity:0;transition:opacity 1.2s ease}
-  iframe.on{opacity:1}
+  iframe{position:fixed;inset:0;width:100%;height:100%;border:0;opacity:0;transition:opacity .6s ease;pointer-events:none}
+  iframe.on{opacity:1;pointer-events:auto}
   .keepalive{position:fixed;right:0;bottom:0;width:4px;height:4px;opacity:.01;pointer-events:none;z-index:10000}
 </style>
 </head>
 <body>
 <video class="keepalive" src="keepalive.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
-<iframe id="fa" src="trimestre.html" class="on"></iframe>
-<iframe id="fb"></iframe>
+<!-- ROTADOR DA TV v3 (25/08/2026, William): ordem FIXA e tempo IGUAL.
+     1) iniciais do MÊS  2) encerramentos do MÊS  3) iniciais META (trimestre). 10s cravados em cada.
+     Os 3 painéis ficam carregados o tempo todo (cada um atualiza os dados sozinho a cada 30s);
+     o rotador só alterna a visibilidade, então a troca é instantânea e o tempo não depende de carregamento. -->
+<iframe id="p0" src="mes/index.html?tv=1" title="Iniciais do mês"></iframe>
+<iframe id="p1" src="https://silvapimentadireitomedico-cpu.github.io/dashboard-encerramentos-silva-pimenta/?tv=1" title="Encerramentos do mês"></iframe>
+<iframe id="p2" src="trimestre.html?tv=1" title="Iniciais meta (trimestre)"></iframe>
 <script>
-// ROTADOR DA TV (05/08/2026): alterna os 3 painéis no MESMO link que já está na TV.
-// trimestre (teal) -> mês (bordô) -> encerramentos, 45s cada, com crossfade.
-const PAINEIS = [
-  'trimestre.html',
-  'mes/index.html',
-  'https://silvapimentadireitomedico-cpu.github.io/dashboard-encerramentos-silva-pimenta/'
-];
-const TEMPO_MS = 45000;
-let idx = 0, mostrando = 'fa', tmr = null;
-// O relógio conta a partir de quando o painel APARECE (não do início do carregamento).
-// Antes era setInterval fixo: o mensal (mais pesado) entrava atrasado e saía no horário,
-// ficando com bem menos tempo de tela que os outros (reclamação William 11/08).
-function mostrar(el, prox) {
-  const antigo = document.getElementById(mostrando);
-  antigo.classList.remove('on');
-  el.classList.add('on');
-  mostrando = prox;
-  // esvazia o iframe oculto (economiza e evita som/fala em dobro)
-  setTimeout(() => { if (antigo !== document.getElementById(mostrando)) antigo.src = 'about:blank'; }, 1600);
-  clearTimeout(tmr);
-  tmr = setTimeout(trocar, TEMPO_MS); // próximo giro: 45s de tela CHEIOS pra este painel
+const ORDEM = ['p0', 'p1', 'p2'];   // mês → encerramentos → trimestre
+const TEMPO_MS = 10000;             // 10s exatos por painel
+let idx = 0, comecou = false;
+
+// Avisa cada painel se está visível (a cobrança das 17:00 só fala no painel que está na tela).
+function avisar() {
+  ORDEM.forEach((id, i) => {
+    try { document.getElementById(id).contentWindow.postMessage({ tv: i === idx ? 'visible' : 'hidden' }, '*'); } catch (e) {}
+  });
 }
-function trocar() {
-  idx = (idx + 1) % PAINEIS.length;
-  const prox = mostrando === 'fa' ? 'fb' : 'fa';
-  const el = document.getElementById(prox);
-  let trocou = false;
-  el.onload = () => { if (!trocou) { trocou = true; mostrar(el, prox); } };
-  el.src = PAINEIS[idx] + (PAINEIS[idx].includes('?') ? '&' : '?') + 'cb=' + Date.now();
-  // fallback: se o onload não vier em 8s, mostra assim mesmo (evita ficar preso)
-  setTimeout(() => { if (!trocou) { trocou = true; mostrar(el, prox); } }, 8000);
+function mostrar(i) {
+  idx = i;
+  ORDEM.forEach((id, k) => document.getElementById(id).classList.toggle('on', k === i));
+  avisar();
 }
-tmr = setTimeout(trocar, TEMPO_MS);
-// watchdog: iframe visível vazio (deploy no meio, falha de rede) -> recarrega
+function girar() { mostrar((idx + 1) % ORDEM.length); setTimeout(girar, TEMPO_MS); }
+function comecar() { if (comecou) return; comecou = true; mostrar(0); setTimeout(girar, TEMPO_MS); }
+document.getElementById('p0').addEventListener('load', comecar);
+setTimeout(comecar, 4000); // se o 1º demorar, começa assim mesmo
+
+// watchdog: painel da mesma origem que ficou vazio (deploy no meio, rede) → recarrega só ele
 setInterval(() => {
-  try {
-    const f = document.getElementById(mostrando);
-    const d = f.contentDocument;
-    if (!d || !d.body || d.body.children.length === 0) { f.src = f.src; }
-  } catch (e) { /* cross-origin improvável (mesmo host); ignora */ }
-}, 12000);
-// keepalive: wake lock + reload periódico (mesmas 3 camadas dos painéis)
+  ORDEM.forEach(id => {
+    const f = document.getElementById(id);
+    try { const d = f.contentDocument; if (d && d.readyState === 'complete' && d.body && d.body.children.length === 0) f.src = f.src; } catch (e) { /* cross-origin: ignora */ }
+  });
+}, 15000);
+
+// keepalive: wake lock + vídeo mudo + reload a cada 30 min (mesmas 3 camadas de antes)
 (async function(){ if(!('wakeLock' in navigator))return; const req=async()=>{try{await navigator.wakeLock.request('screen');}catch(e){}};
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')req();}); req(); })();
 (function(){const v=document.querySelector('.keepalive');if(!v)return;const p=()=>{const x=v.play();if(x&&x.catch)x.catch(()=>{});};
