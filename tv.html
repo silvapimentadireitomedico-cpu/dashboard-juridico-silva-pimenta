@@ -1,79 +1,68 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Silva Pimenta — TV</title>
-  <style>
-    html, body {
-      margin: 0;
-      width: 100%;
-      height: 100%;
-      background: #101418;
-      overflow: hidden;
-    }
-    iframe {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      border: 0;
-      opacity: 0;
-      transition: opacity 0.8s ease;
-      pointer-events: none;
-    }
-    iframe.ativo {
-      opacity: 1;
-      pointer-events: auto;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Silva Pimenta — Painéis Jurídico (TV)</title>
+<style>
+  html,body{margin:0;width:100%;height:100%;background:#0F2F3B;overflow:hidden}
+  iframe{position:fixed;inset:0;width:100%;height:100%;border:0;visibility:hidden;opacity:0;pointer-events:none}
+  iframe.on{visibility:visible;opacity:1;pointer-events:auto}
+  .keepalive{position:fixed;right:0;bottom:0;width:4px;height:4px;opacity:.01;pointer-events:none;z-index:10000}
+</style>
 </head>
 <body>
-  <!-- Os dois dashboards ficam carregados o tempo todo (cada um segue
-       buscando dados da própria API a cada 30s). A rotação só alterna
-       a visibilidade com crossfade — sem recarregar nada. -->
-  <iframe id="dashIniciais" class="ativo"
-          src="https://silvapimentadireitomedico-cpu.github.io/dashboard-juridico-silva-pimenta/"
-          title="Dashboard de Iniciais"></iframe>
-  <iframe id="dashEncerramentos"
-          src="https://silvapimentadireitomedico-cpu.github.io/dashboard-encerramentos-silva-pimenta/"
-          title="Dashboard de Encerramentos"></iframe>
+<video class="keepalive" src="keepalive.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+<!-- ATENCAO: tv.html e uma COPIA IDENTICA deste arquivo (a TV pode estar apontada pra qualquer um dos dois).
+     Mudou aqui, copie pro tv.html.
+<!-- ROTADOR DA TV v4 (25/08/2026, William): rosa (mês) → marrom (encerramentos) → azul (trimestre), 12s CRAVADOS.
+     v4 decide pelo RELÓGIO DE PAREDE (não por setTimeout encadeado): no Fire Stick a CPU engasga e o
+     timer atrasava (3s/30s/5s/10s cronometrados). Agora, a cada 200ms, o painel visível é o que o relógio
+     manda: floor((agora - t0) / 12s) mod 3. Atraso não acumula. Painel escondido fica com visibility:hidden
+     (não pinta) e recebe postMessage 'hidden' pra parar animação, som, vídeo e download da planilha. -->
+<iframe id="p0" src="mes/index.html?tv=1" title="Iniciais do mês"></iframe>
+<iframe id="p1" src="https://silvapimentadireitomedico-cpu.github.io/dashboard-encerramentos-silva-pimenta/?tv=1" title="Encerramentos do mês"></iframe>
+<iframe id="p2" src="trimestre.html?tv=1" title="Iniciais meta (trimestre)"></iframe>
+<script>
+const ORDEM = ['p0', 'p1', 'p2'];   // rosa (mês) → marrom (encerramentos) → azul (trimestre)
+const TEMPO_MS = 12000;             // 12s por painel, pelo relógio de parede
+let t0 = null, atual = -1;
 
-  <script>
-    // Tempo de exibição de cada dashboard antes de trocar
-    const TROCA_MS = 30000;
+function avisar() {
+  ORDEM.forEach((id, i) => {
+    try { document.getElementById(id).contentWindow.postMessage({ tv: i === atual ? 'visible' : 'hidden' }, '*'); } catch (e) {}
+  });
+}
+function mostrar(i) {
+  atual = i;
+  ORDEM.forEach((id, k) => document.getElementById(id).classList.toggle('on', k === i));
+  avisar();
+}
+function tick() {
+  if (t0 === null) return;
+  const i = Math.floor((Date.now() - t0) / TEMPO_MS) % ORDEM.length;
+  if (i !== atual) mostrar(i);
+}
+function comecar() { if (t0 !== null) return; t0 = Date.now(); mostrar(0); setInterval(tick, 200); }
+document.getElementById('p0').addEventListener('load', comecar);
+setTimeout(comecar, 4000);
+// painel que recarregou (reload próprio de 30 min) volta achando que está visível: reavisa
+ORDEM.forEach(id => document.getElementById(id).addEventListener('load', () => { if (atual >= 0) avisar(); }));
 
-    const frames = [
-      document.getElementById('dashIniciais'),
-      document.getElementById('dashEncerramentos')
-    ];
-    let atual = 0;
+// watchdog: painel da mesma origem que ficou vazio → recarrega só ele
+setInterval(() => {
+  ORDEM.forEach(id => {
+    const f = document.getElementById(id);
+    try { const d = f.contentDocument; if (d && d.readyState === 'complete' && d.body && d.body.children.length === 0) f.src = f.src; } catch (e) {}
+  });
+}, 15000);
 
-    setInterval(() => {
-      atual = 1 - atual;
-      frames.forEach((f, i) => f.classList.toggle('ativo', i === atual));
-    }, TROCA_MS);
-
-    // Wake Lock no topo — os iframes têm o próprio keepalive,
-    // mas o pedido daqui cobre a página rotadora inteira.
-    (async function pedirWakeLock() {
-      if (!('wakeLock' in navigator)) return;
-      let lock = null;
-      const requisitar = async () => {
-        try {
-          lock = await navigator.wakeLock.request('screen');
-        } catch (e) {}
-      };
-      await requisitar();
-      document.addEventListener('visibilitychange', async () => {
-        if (document.visibilityState === 'visible' && (!lock || lock.released)) {
-          await requisitar();
-        }
-      });
-    })();
-
-    // Rede de segurança contra Silk Browser bugado: recarrega tudo a cada 30 min
-    setTimeout(() => location.reload(), 30 * 60 * 1000);
-  </script>
+// keepalive: wake lock + vídeo mudo + reload a cada 30 min
+(async function(){ if(!('wakeLock' in navigator))return; const req=async()=>{try{await navigator.wakeLock.request('screen');}catch(e){}};
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')req();}); req(); })();
+(function(){const v=document.querySelector('.keepalive');if(!v)return;const p=()=>{const x=v.play();if(x&&x.catch)x.catch(()=>{});};
+  v.addEventListener('pause',p);v.addEventListener('ended',p);p();setInterval(()=>{if(v.paused)p();},30000);})();
+setTimeout(()=>location.replace(location.pathname + '?r=' + Date.now()), 30*60*1000); // reload SEM cache
+</script>
 </body>
 </html>

@@ -13,6 +13,8 @@
 </head>
 <body>
 <video class="keepalive" src="keepalive.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+<!-- ATENCAO: tv.html e uma COPIA IDENTICA deste arquivo (a TV pode estar apontada pra qualquer um dos dois).
+     Mudou aqui, copie pro tv.html.
 <!-- ROTADOR DA TV v4 (25/08/2026, William): rosa (mês) → marrom (encerramentos) → azul (trimestre), 12s CRAVADOS.
      v4 decide pelo RELÓGIO DE PAREDE (não por setTimeout encadeado): no Fire Stick a CPU engasga e o
      timer atrasava (3s/30s/5s/10s cronometrados). Agora, a cada 200ms, o painel visível é o que o relógio
@@ -60,7 +62,7 @@ setInterval(() => {
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')req();}); req(); })();
 (function(){const v=document.querySelector('.keepalive');if(!v)return;const p=()=>{const x=v.play();if(x&&x.catch)x.catch(()=>{});};
   v.addEventListener('pause',p);v.addEventListener('ended',p);p();setInterval(()=>{if(v.paused)p();},30000);})();
-setTimeout(()=>location.reload(), 30*60*1000);
+setTimeout(()=>location.replace(location.pathname + '?r=' + Date.now()), 30*60*1000); // reload SEM cache
 </script>
 </body>
 </html>
