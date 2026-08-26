@@ -409,6 +409,7 @@ scaleDashboard();
   const v = document.querySelector('.keepalive');
   if (!v) return;
   const tentarPlay = () => {
+    if (window.__tvVisivel === false) return; // escondido na TV: fica pausado
     const p = v.play();
     if (p && typeof p.catch === 'function') p.catch(() => {});
   };
@@ -426,7 +427,7 @@ setTimeout(() => {
 }, 30 * 60 * 1000);
 
 refresh();
-setInterval(refresh, POLL_MS);
+setInterval(() => { if (window.__tvVisivel !== false) { window.__ultRefresh = Date.now(); refresh(); } }, POLL_MS);
 
 
 // Som da Inspetora Fernanda: "sonar de lupa" curtinho, no MÁXIMO 1x a cada 3 min
@@ -452,7 +453,7 @@ function tocarSomInspetora() {
     tom(990, 0.22, 0.35, 0.16);   // "dum" (subida de quem achou algo)
   } catch (e) { /* autoplay bloqueado: silencia */ }
 }
-setInterval(tocarSomInspetora, 180000);
+setInterval(() => { if (window.__tvVisivel !== false) tocarSomInspetora(); }, 180000);
 
 
 // Inspetora Fernanda VIGIA quem está no vermelho (sem produção hoje).
@@ -480,7 +481,7 @@ function moverInspetora() {
   insp.style.left = left + 'px';
   insp.style.top  = top + 'px';
 }
-setInterval(moverInspetora, 4000);
+setInterval(() => { if (window.__tvVisivel !== false) moverInspetora(); }, 4000);
 setTimeout(moverInspetora, 3000);
 
 
@@ -527,7 +528,15 @@ function mostrarCobranca() {
 }
 // TV (25/08): o rotador avisa por postMessage se este painel está NA TELA; fora da TV é sempre visível.
 window.__tvVisivel = true;
-window.addEventListener('message', function (e) { if (e && e.data && e.data.tv) window.__tvVisivel = (e.data.tv === 'visible'); });
+window.addEventListener('message', function (e) {
+  if (!(e && e.data && e.data.tv)) return;
+  window.__tvVisivel = (e.data.tv === 'visible');
+  const kv = document.querySelector('.keepalive');
+  if (window.__tvVisivel) {
+    if (kv && kv.paused) { const pp = kv.play(); if (pp && pp.catch) pp.catch(function () {}); }
+    if (typeof refresh === 'function' && Date.now() - (window.__ultRefresh || 0) > 20000) { window.__ultRefresh = Date.now(); refresh(); }
+  } else if (kv && !kv.paused) { kv.pause(); }
+});
 function checarCobranca1700() {
   const agora = new Date();
   if (agora.getHours() !== 17 || agora.getMinutes() >= 2) return;

@@ -6,50 +6,56 @@
 <title>Silva Pimenta — Painéis Jurídico (TV)</title>
 <style>
   html,body{margin:0;width:100%;height:100%;background:#0F2F3B;overflow:hidden}
-  iframe{position:fixed;inset:0;width:100%;height:100%;border:0;opacity:0;transition:opacity .6s ease;pointer-events:none}
-  iframe.on{opacity:1;pointer-events:auto}
+  iframe{position:fixed;inset:0;width:100%;height:100%;border:0;visibility:hidden;opacity:0;pointer-events:none}
+  iframe.on{visibility:visible;opacity:1;pointer-events:auto}
   .keepalive{position:fixed;right:0;bottom:0;width:4px;height:4px;opacity:.01;pointer-events:none;z-index:10000}
 </style>
 </head>
 <body>
 <video class="keepalive" src="keepalive.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
-<!-- ROTADOR DA TV v3 (25/08/2026, William): ordem FIXA e tempo IGUAL.
-     1) iniciais do MÊS  2) encerramentos do MÊS  3) iniciais META (trimestre). 10s cravados em cada.
-     Os 3 painéis ficam carregados o tempo todo (cada um atualiza os dados sozinho a cada 30s);
-     o rotador só alterna a visibilidade, então a troca é instantânea e o tempo não depende de carregamento. -->
+<!-- ROTADOR DA TV v4 (25/08/2026, William): rosa (mês) → marrom (encerramentos) → azul (trimestre), 12s CRAVADOS.
+     v4 decide pelo RELÓGIO DE PAREDE (não por setTimeout encadeado): no Fire Stick a CPU engasga e o
+     timer atrasava (3s/30s/5s/10s cronometrados). Agora, a cada 200ms, o painel visível é o que o relógio
+     manda: floor((agora - t0) / 12s) mod 3. Atraso não acumula. Painel escondido fica com visibility:hidden
+     (não pinta) e recebe postMessage 'hidden' pra parar animação, som, vídeo e download da planilha. -->
 <iframe id="p0" src="mes/index.html?tv=1" title="Iniciais do mês"></iframe>
 <iframe id="p1" src="https://silvapimentadireitomedico-cpu.github.io/dashboard-encerramentos-silva-pimenta/?tv=1" title="Encerramentos do mês"></iframe>
 <iframe id="p2" src="trimestre.html?tv=1" title="Iniciais meta (trimestre)"></iframe>
 <script>
-const ORDEM = ['p0', 'p1', 'p2'];   // mês → encerramentos → trimestre
-const TEMPO_MS = 10000;             // 10s exatos por painel
-let idx = 0, comecou = false;
+const ORDEM = ['p0', 'p1', 'p2'];   // rosa (mês) → marrom (encerramentos) → azul (trimestre)
+const TEMPO_MS = 12000;             // 12s por painel, pelo relógio de parede
+let t0 = null, atual = -1;
 
-// Avisa cada painel se está visível (a cobrança das 17:00 só fala no painel que está na tela).
 function avisar() {
   ORDEM.forEach((id, i) => {
-    try { document.getElementById(id).contentWindow.postMessage({ tv: i === idx ? 'visible' : 'hidden' }, '*'); } catch (e) {}
+    try { document.getElementById(id).contentWindow.postMessage({ tv: i === atual ? 'visible' : 'hidden' }, '*'); } catch (e) {}
   });
 }
 function mostrar(i) {
-  idx = i;
+  atual = i;
   ORDEM.forEach((id, k) => document.getElementById(id).classList.toggle('on', k === i));
   avisar();
 }
-function girar() { mostrar((idx + 1) % ORDEM.length); setTimeout(girar, TEMPO_MS); }
-function comecar() { if (comecou) return; comecou = true; mostrar(0); setTimeout(girar, TEMPO_MS); }
+function tick() {
+  if (t0 === null) return;
+  const i = Math.floor((Date.now() - t0) / TEMPO_MS) % ORDEM.length;
+  if (i !== atual) mostrar(i);
+}
+function comecar() { if (t0 !== null) return; t0 = Date.now(); mostrar(0); setInterval(tick, 200); }
 document.getElementById('p0').addEventListener('load', comecar);
-setTimeout(comecar, 4000); // se o 1º demorar, começa assim mesmo
+setTimeout(comecar, 4000);
+// painel que recarregou (reload próprio de 30 min) volta achando que está visível: reavisa
+ORDEM.forEach(id => document.getElementById(id).addEventListener('load', () => { if (atual >= 0) avisar(); }));
 
-// watchdog: painel da mesma origem que ficou vazio (deploy no meio, rede) → recarrega só ele
+// watchdog: painel da mesma origem que ficou vazio → recarrega só ele
 setInterval(() => {
   ORDEM.forEach(id => {
     const f = document.getElementById(id);
-    try { const d = f.contentDocument; if (d && d.readyState === 'complete' && d.body && d.body.children.length === 0) f.src = f.src; } catch (e) { /* cross-origin: ignora */ }
+    try { const d = f.contentDocument; if (d && d.readyState === 'complete' && d.body && d.body.children.length === 0) f.src = f.src; } catch (e) {}
   });
 }, 15000);
 
-// keepalive: wake lock + vídeo mudo + reload a cada 30 min (mesmas 3 camadas de antes)
+// keepalive: wake lock + vídeo mudo + reload a cada 30 min
 (async function(){ if(!('wakeLock' in navigator))return; const req=async()=>{try{await navigator.wakeLock.request('screen');}catch(e){}};
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')req();}); req(); })();
 (function(){const v=document.querySelector('.keepalive');if(!v)return;const p=()=>{const x=v.play();if(x&&x.catch)x.catch(()=>{});};
