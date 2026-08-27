@@ -9,6 +9,7 @@
   iframe{position:fixed;inset:0;width:100%;height:100%;border:0;visibility:hidden;opacity:0;pointer-events:none}
   iframe.on{visibility:visible;opacity:1;pointer-events:auto}
   .keepalive{position:fixed;right:0;bottom:0;width:4px;height:4px;opacity:.01;pointer-events:none;z-index:10000}
+  #tv-selo{position:fixed;left:6px;bottom:4px;font:10px/1 monospace;color:#fff;opacity:.35;z-index:10001;pointer-events:none}
 </style>
 </head>
 <body>
@@ -20,6 +21,7 @@
      timer atrasava (3s/30s/5s/10s cronometrados). Agora, a cada 200ms, o painel visível é o que o relógio
      manda: floor((agora - t0) / 12s) mod 3. Atraso não acumula. Painel escondido fica com visibility:hidden
      (não pinta) e recebe postMessage 'hidden' pra parar animação, som, vídeo e download da planilha. -->
+<div id="tv-selo">TV v4 · 12s</div>
 <iframe id="p0" src="mes/index.html?tv=1" title="Iniciais do mês"></iframe>
 <iframe id="p1" src="https://silvapimentadireitomedico-cpu.github.io/dashboard-encerramentos-silva-pimenta/?tv=1" title="Encerramentos do mês"></iframe>
 <iframe id="p2" src="trimestre.html?tv=1" title="Iniciais meta (trimestre)"></iframe>
