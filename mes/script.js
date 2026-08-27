@@ -31,7 +31,7 @@ const COR_TIPO = {
 };
 
 // Polling — busca novos dados a cada 30s
-const POLL_MS = 30000;
+const POLL_MS = /[?&]tv=1/.test(location.search) ? 300000 : 30000; // na TV (?tv=1) 5 min: parse do xlsx engasga o Fire Stick
 
 // Estado pra detectar troca de 1º lugar entre refreshes
 let ultimoLider = null;
@@ -523,7 +523,7 @@ window.addEventListener('message', function (e) {
   const kv = document.querySelector('.keepalive');
   if (window.__tvVisivel) {
     if (kv && kv.paused) { const pp = kv.play(); if (pp && pp.catch) pp.catch(function () {}); }
-    if (typeof refresh === 'function' && Date.now() - (window.__ultRefresh || 0) > 20000) { window.__ultRefresh = Date.now(); refresh(); }
+    if (typeof refresh === 'function' && Date.now() - (window.__ultRefresh || 0) > Math.min(POLL_MS, 300000)) { window.__ultRefresh = Date.now(); refresh(); }
   } else if (kv && !kv.paused) { kv.pause(); }
 });
 function checarCobranca1700() {
