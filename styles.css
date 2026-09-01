@@ -927,63 +927,56 @@ footer.footer {
 @keyframes cobranca-pulsa { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
 /* =========================================================
-   VENCEDORES DO MÊS ANTERIOR (01/09/2026) — quadro fixo pra premiação
+   VENCEDORES DO MÊS ANTERIOR (v2, 01/09/2026) — no cabeçalho: advogados à esquerda
+   do título, estagiários à direita. 3 de cada (são disputas separadas).
    ========================================================= */
-.bottom-vencedores { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; }
-.bottom-vencedores .venc-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 8px;
+.header > .venc-topo { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.header > .venc-topo.esq { align-items: flex-end; padding-right: 28px; }
+.header > .venc-topo.dir { align-items: flex-start; padding-left: 28px; }
+.header > .brand, .header > .total-box { flex: 0 0 auto; }
+.venc-topo-tit {
+  font-family: 'Playfair Display', serif; font-weight: 600; font-size: 12px; letter-spacing: 3px;
+  color: var(--gold); text-transform: uppercase; white-space: nowrap;
 }
+.venc-topo-lista { display: flex; gap: 10px; }
 .venc-item {
-  position: relative;
-  min-width: 0;
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  padding: 12px 8px 10px;
-  border: 1px solid rgba(197, 165, 122, .3);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, .02);
+  position: relative; min-width: 0;
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 14px 6px 8px;
+  border: 1px solid rgba(197, 165, 122, .3); border-radius: 40px;
+  background: rgba(255, 255, 255, .03);
 }
-.venc-item.v1 { border-color: var(--gold); background: rgba(197, 165, 122, .09); box-shadow: 0 0 24px rgba(197, 165, 122, .12); }
-.venc-photo-wrap { position: relative; width: 74px; height: 74px; }
+.venc-item.v1 { border-color: var(--gold); background: rgba(197, 165, 122, .10); box-shadow: 0 0 18px rgba(197, 165, 122, .14); }
+.venc-photo-wrap { position: relative; width: 46px; height: 46px; flex: 0 0 46px; }
 .venc-photo {
-  width: 74px; height: 74px; border-radius: 50%;
+  width: 46px; height: 46px; border-radius: 50%;
   background-color: var(--teal-deep);
   background-size: cover; background-position: center 25%; background-repeat: no-repeat;
-  border: 3px solid var(--gold);
+  border: 2px solid var(--gold);
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Playfair Display', serif; font-size: 26px; color: var(--gold);
+  font-family: 'Playfair Display', serif; font-size: 18px; color: var(--gold);
 }
 .venc-photo.with-image { background-color: transparent; color: transparent; }
 .venc-medal {
-  position: absolute; right: -8px; bottom: -6px;
-  width: 30px; height: 30px; border-radius: 50%;
+  position: absolute; right: -6px; bottom: -4px;
+  width: 22px; height: 22px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Playfair Display', serif; font-weight: 700; font-size: 13px;
+  font-family: 'Playfair Display', serif; font-weight: 700; font-size: 10px;
   color: var(--teal-deep);
   background: linear-gradient(135deg, var(--gold-bright) 0%, var(--gold) 50%, var(--gold-deep) 100%);
   box-shadow: 0 2px 6px rgba(0, 0, 0, .4);
 }
 .v2 .venc-medal { background: linear-gradient(135deg, #E8E8E8 0%, #C0C0C0 50%, #909090 100%); }
 .v3 .venc-medal { background: linear-gradient(135deg, #E0A878 0%, #CD7F32 50%, #8B5A2B 100%); color: var(--white); }
+.venc-txt { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
 .venc-name {
-  max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  font-family: 'Playfair Display', serif; font-weight: 700; font-size: 18px; letter-spacing: .5px;
-  color: var(--white);
+  max-width: 130px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-family: 'Playfair Display', serif; font-weight: 700; font-size: 15px; letter-spacing: .3px;
+  color: var(--white); line-height: 1.1;
 }
 .v1 .venc-name { color: var(--gold-bright); }
 .venc-qtd {
-  font-family: 'Inter', sans-serif; font-weight: 800; font-size: 26px; line-height: 1;
+  font-family: 'Inter', sans-serif; font-weight: 800; font-size: 17px; line-height: 1.1;
   color: var(--gold); font-variant-numeric: tabular-nums;
 }
-.venc-qtd small { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--white-mid); margin-left: 6px; }
-.venc-vazio { color: var(--white-mid); font-size: 14px; padding: 18px 0; text-align: center; }
-/* no mensal a faixa de baixo tem 3 blocos (tipos · vencedores · KPIs): tipos em 3 colunas */
-.bottom.com-vencedores .bottom-tipos .tipos-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-/* com 3 blocos na faixa, os KPIs ficam mais estreitos: rótulo e número um pouco menores pra não encostar */
-.bottom.com-vencedores .bottom-tipos { flex: 1.1 1 0; }
-.bottom.com-vencedores .bottom-kpis { flex: 1.15 1 0; gap: 8px; }
-.bottom.com-vencedores .kpi-card { padding: 10px 14px; }
-.bottom.com-vencedores .kpi-label { font-size: 11px; letter-spacing: 2px; }
-.bottom.com-vencedores .kpi-value { font-size: 34px; }
+.venc-qtd small { font-size: 8px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--white-mid); margin-left: 5px; }

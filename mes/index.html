@@ -24,9 +24,17 @@
     <div class="brand">
       <img src="../logo.png" alt="Silva Pimenta" class="brand-logo">
     </div>
+    <div class="venc-topo esq" id="vencAdv" hidden>
+      <div class="venc-topo-tit" id="vencAdvTit">🏆 Advogados · mês anterior</div>
+      <div class="venc-topo-lista" id="vencAdvLista"></div>
+    </div>
     <div class="period">
       <div class="period-label">Setor Jurídico · <span id="trimestreValue">Mês</span></div>
       <div class="period-value" id="periodValue">Maio · 2026</div>
+    </div>
+    <div class="venc-topo dir" id="vencEst" hidden>
+      <div class="venc-topo-tit" id="vencEstTit">🏆 Estagiários · mês anterior</div>
+      <div class="venc-topo-lista" id="vencEstLista"></div>
     </div>
     <div class="total-box">
       <div class="total-label">Total do mês</div>
@@ -102,14 +110,10 @@
     </div>
   </section>
 
-  <section class="bottom com-vencedores">
+  <section class="bottom">
     <div class="bottom-tipos">
       <h2 class="section-title">Tipos de Processo</h2>
       <div class="tipos-grid" id="tiposGrid"><!-- preenchido via JS --></div>
-    </div>
-    <div class="bottom-vencedores" id="vencedores">
-      <h2 class="section-title" id="vencTitulo">🏆 Vencedores · mês anterior</h2>
-      <div class="venc-grid" id="vencGrid"><!-- preenchido via JS --></div>
     </div>
     <div class="bottom-kpis">
       <div class="kpi-card kpi-revisados">

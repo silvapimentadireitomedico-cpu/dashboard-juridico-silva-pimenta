@@ -339,22 +339,28 @@ function renderChart(dados) {
     dots + xLabels;
 }
 
-// Vencedores do mês anterior (William, 01/09/2026): os 3 primeiros de todo o time, pra
-// premiação no escritório. Vem pronto do motor (dados.vencedores); some se a aba não existe.
+// Vencedores do mês anterior (William, 01/09/2026): duas disputas, ADVOGADOS e ESTAGIÁRIOS,
+// 3 de cada, no cabeçalho (advogados à esquerda do título, estagiários à direita, como as tabelas).
+// Vem pronto do motor (dados.vencedores); some se a aba do mês anterior não existe.
 function renderVencedores(dados) {
-  const box = document.getElementById('vencedores'); if (!box) return;
   const v = dados.vencedores;
-  const grid = document.getElementById('vencGrid'), tit = document.getElementById('vencTitulo');
-  if (!v || !(v.ranking || []).length) { box.style.display = 'none'; return; }
-  box.style.display = '';
-  tit.textContent = '🏆 Vencedores · ' + v.rotulo;
-  const top = v.ranking.filter(r => r.qtd > 0).slice(0, 3);
-  if (!top.length) { grid.innerHTML = '<div class="venc-vazio">Sem registros em ' + v.rotulo + '</div>'; return; }
-  grid.innerHTML = top.map((r, i) => `<div class="venc-item v${i + 1}">
-      <div class="venc-photo-wrap"><div class="venc-photo"></div><div class="venc-medal">${i + 1}º</div></div>
-      <div class="venc-name">${capitalize(r.nome)}</div>
-      <div class="venc-qtd">${r.qtd}<small>iniciais</small></div></div>`).join('');
-  top.forEach((r, i) => setFotoOrInicial(grid.children[i].querySelector('.venc-photo'), r.nome));
+  const grupos = [
+    { box: 'vencAdv', tit: 'vencAdvTit', lista: 'vencAdvLista', rot: 'Advogados', filtro: r => ehAdvogado(r.nome) },
+    { box: 'vencEst', tit: 'vencEstTit', lista: 'vencEstLista', rot: 'Estagiários', filtro: r => !ehAdvogado(r.nome) },
+  ];
+  grupos.forEach(g => {
+    const box = document.getElementById(g.box); if (!box) return;
+    const top = v ? (v.ranking || []).filter(g.filtro).filter(r => r.qtd > 0).slice(0, 3) : [];
+    if (!top.length) { box.hidden = true; return; }
+    box.hidden = false;
+    document.getElementById(g.tit).textContent = '🏆 ' + g.rot + ' · ' + v.rotulo;
+    const el = document.getElementById(g.lista);
+    el.innerHTML = top.map((r, i) => `<div class="venc-item v${i + 1}">
+        <div class="venc-photo-wrap"><div class="venc-photo"></div><div class="venc-medal">${i + 1}º</div></div>
+        <div class="venc-txt"><div class="venc-name">${capitalize(r.nome)}</div>
+        <div class="venc-qtd">${r.qtd}<small>iniciais</small></div></div></div>`).join('');
+    top.forEach((r, i) => setFotoOrInicial(el.children[i].querySelector('.venc-photo'), r.nome));
+  });
 }
 
 async function refresh() {
