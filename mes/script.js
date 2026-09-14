@@ -13,7 +13,7 @@ const EQUIPE = ['MAX', 'STELLA', 'NATALY', 'ISABELLA', 'ANA', 'SUELLEN'];
 
 // Divisão do William (05/08/2026): ADVOGADOS x ESTAGIÁRIOS.
 // Quem NÃO está na lista de advogados conta como estagiário (novos entram sozinhos).
-const ADVOGADOS = ['ANA', 'SUELLEN', 'MAX', 'RODRIGO']; // Rodrigo e advogado (William 25/08/2026)
+const ADVOGADOS = ['ANA', 'SUELLEN', 'MAX', 'RODRIGO', 'LUIZA', 'EBONY']; // Rodrigo e advogado (William 25/08/2026); Luiza e Ebony sao advogadas (William 14/09/2026)
 const ehAdvogado = (nome) => ADVOGADOS.includes(String(nome || '').trim().toUpperCase());
 
 // Cores das pílulas dos tipos de processo
