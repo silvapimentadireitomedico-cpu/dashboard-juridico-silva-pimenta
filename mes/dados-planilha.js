@@ -59,15 +59,27 @@ const COR_PRODUTO_MAPA = {
 function _norm(s) {
   return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().replace(/\s+/g, ' ').trim();
 }
-function _escolherAba(nomes, candidatos) {
+// Aba do trimestre (02/10/2026): compara SEM espacos ("OUTUBRO - DEZEMBRO2026" = "OUTUBRO - DEZEMBRO 2026") e nunca
+// aceita aba de OUTRO ano. Aba com ano no nome: so o ano pedido. Aba sem ano no nome: vale o ano da celula A1 dela.
+// Antes, a aba nova sem espaco antes do ano nao batia e o painel caia na "OUTUBRO - DEZEMBRO" de 2025.
+function _semEspaco(s) { return _norm(s).replace(/\s+/g, ''); }
+function _escolherAba(nomes, candidatos, wb) {
+  const anoPedido = (_norm(candidatos[0]).match(/(\d{4})$/) || [])[1];
+  const aceita = (nm) => {
+    if (!anoPedido) return true;
+    const doNome = (_norm(nm).match(/(\d{4})$/) || [])[1];
+    if (doNome) return doNome === anoPedido;
+    const a1 = wb && wb.Sheets[nm] && wb.Sheets[nm]['A1'];
+    return !(a1 && typeof a1.v === 'number' && a1.v > 1900 && a1.v < 3000 && String(Math.round(a1.v)) !== anoPedido);
+  };
   for (const cand of candidatos) {
-    const alvo = _norm(cand);
-    for (const nm of nomes) if (_norm(nm) === alvo) return nm;
+    const alvo = _semEspaco(cand);
+    for (const nm of nomes) if (_semEspaco(nm) === alvo && aceita(nm)) return nm;
   }
   // fallback: contem
   for (const cand of candidatos) {
-    const alvo = _norm(cand);
-    for (const nm of nomes) if (_norm(nm).indexOf(alvo) >= 0) return nm;
+    const alvo = _semEspaco(cand);
+    for (const nm of nomes) if (_semEspaco(nm).indexOf(alvo) >= 0 && aceita(nm)) return nm;
   }
   return null;
 }
@@ -141,7 +153,7 @@ function _abasDoTrimestre(ano, mes) {   // mes 1-12
 function _vencedoresMesAnterior(wb, agora) {
   const ant = new Date(agora.getFullYear(), agora.getMonth() - 1, 1);
   const y = ant.getFullYear(), m = ant.getMonth() + 1;
-  const aba = _escolherAba(wb.SheetNames, _abasDoTrimestre(y, m));
+  const aba = _escolherAba(wb.SheetNames, _abasDoTrimestre(y, m), wb);
   if (!aba) return null;
   const r = _rankingSimples(wb.Sheets[aba], MOTOR_CFG.linhaCabecalho, MOTOR_CFG.linhaDados, dt => dt.y === y && dt.m === m);
   return { ano: y, mes: m, rotulo: _MESES_PT[m - 1] + ' · ' + y, aba: aba, ranking: r.ranking, total: r.total };
@@ -151,7 +163,7 @@ async function montarDadosDaPlanilha() {
   const resp = await fetch(MOTOR_CFG.url + '&_=' + Date.now());
   if (!resp.ok) throw new Error('planilha HTTP ' + resp.status);
   const wb = XLSX.read(await resp.arrayBuffer(), { cellStyles: true });
-  const nomeAba = _escolherAba(wb.SheetNames, MOTOR_CFG.abas());
+  const nomeAba = _escolherAba(wb.SheetNames, MOTOR_CFG.abas(), wb);
   if (!nomeAba) throw new Error('aba nao encontrada: ' + MOTOR_CFG.abas().join(' | '));
   const ws = wb.Sheets[nomeAba];
   const fim = XLSX.utils.decode_range(ws['!ref'] || 'A1:A1').e.r + 1; // ultima linha (1-based)
