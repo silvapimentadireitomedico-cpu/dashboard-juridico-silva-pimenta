@@ -13,8 +13,15 @@ const EQUIPE = ['MAX', 'STELLA', 'NATALY', 'ISABELLA', 'ANA', 'SUELLEN'];
 
 // Divisão do William (05/08/2026): ADVOGADOS x ESTAGIÁRIOS.
 // Quem NÃO está na lista de advogados conta como estagiário (novos entram sozinhos).
-const ADVOGADOS = ['ANA', 'SUELLEN', 'MAX', 'RODRIGO', 'LUIZA', 'EBONY']; // Rodrigo e advogado (William 25/08/2026); Luiza e Ebony sao advogadas (William 14/09/2026)
-const ehAdvogado = (nome) => ADVOGADOS.includes(String(nome || '').trim().toUpperCase());
+const ADVOGADOS = ['ANA', 'SUELLEN', 'MAX', 'RODRIGO', 'LUIZA', 'EBONY', 'ISABELLA', 'ISABELA', 'RAPHAELLA', 'RAPHAELA']; // Rodrigo e advogado (William 25/08/2026); Luiza e Ebony sao advogadas (William 14/09/2026); Isabella e Raphaella (com PH) sao advogadas, a Rafaella (com F) e estagiaria (William 07/10/2026)
+// Quem virou advogado DEPOIS conta como advogado a partir deste mes (AAAA-MM). Antes, era estagiario: os vencedores
+// de meses passados nao mudam quando alguem e promovido (William, 07/10/2026; a Isabella venceu setembro como estagiaria).
+const ADVOGADO_DESDE = { ISABELLA: '2026-10', ISABELA: '2026-10', RAPHAELLA: '2026-10', RAPHAELA: '2026-10' };
+const ehAdvogado = (nome, mes) => {
+  const n = String(nome || '').trim().toUpperCase();
+  if (!ADVOGADOS.includes(n)) return false;
+  return !(mes && ADVOGADO_DESDE[n] && mes < ADVOGADO_DESDE[n]);
+};
 
 // Cores das pílulas dos tipos de processo
 const COR_TIPO = {
@@ -344,9 +351,10 @@ function renderChart(dados) {
 // Vem pronto do motor (dados.vencedores); some se a aba do mês anterior não existe.
 function renderVencedores(dados) {
   const v = dados.vencedores;
+  const mesV = v && v.ano && v.mes ? v.ano + '-' + String(v.mes).padStart(2, '0') : null; // regra de advogado DAQUELE mes
   const grupos = [
-    { box: 'vencAdv', tit: 'vencAdvTit', lista: 'vencAdvLista', rot: 'Advogados', filtro: r => ehAdvogado(r.nome) },
-    { box: 'vencEst', tit: 'vencEstTit', lista: 'vencEstLista', rot: 'Estagiários', filtro: r => !ehAdvogado(r.nome) },
+    { box: 'vencAdv', tit: 'vencAdvTit', lista: 'vencAdvLista', rot: 'Advogados', filtro: r => ehAdvogado(r.nome, mesV) },
+    { box: 'vencEst', tit: 'vencEstTit', lista: 'vencEstLista', rot: 'Estagiários', filtro: r => !ehAdvogado(r.nome, mesV) },
   ];
   grupos.forEach(g => {
     const box = document.getElementById(g.box); if (!box) return;
